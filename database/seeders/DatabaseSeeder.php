@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(MbkmSeeder::class);
         // \App\Models\User::factory(10)->create();
         User::create([
             'role_id' => 1,
@@ -302,8 +303,18 @@ class DatabaseSeeder extends Seeder
             'angkatan' => '2018',
         ]);
 
+        Mahasiswa::create([
+            'prodi_id' => 3,
+            'konsentrasi_id' => 4,
+            'nim' => '2007125743',
+            'nama' => 'Muhammad Abdullah Qosim',
+            'email' => 'muhammad.abdullah5743@student.unri.ac.id',
+            'password' => bcrypt('1'),
+            'angkatan' => '2020',
+        ]);
+
         Dosen::create([
-            'role_id' => 5,            
+            'role_id' => 5,
             'nip' => 197604092002121002,
             'password' => bcrypt('123456'),
             'nama' => 'Anhar, ST., MT., Ph.D',
@@ -312,7 +323,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Dosen::create([
-            'role_id' => 6,            
+            'role_id' => 6,
             'nip' => 197507052002121003,
             'password' => bcrypt('123456'),
             'nama' => 'Amir Hamzah, S.T., M.T.',
@@ -320,7 +331,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'fericandra.lecturer@unri.ac.id',
         ]);
         Dosen::create([
-            'role_id' => 7,            
+            'role_id' => 7,
             'nip' => 197511042005012001,
             'password' => bcrypt('123456'),
             'nama' => 'Yusnita Rahayu, ST, M.Eng, Ph.D',
@@ -328,7 +339,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'yusnita.rahayu@lecturer.unri.ac.id',
         ]);
         Dosen::create([
-            'role_id' => 8,            
+            'role_id' => 8,
             'nip' => 197404282002121003,
             'password' => bcrypt('123456'),
             'nama' => 'Dr. Feri Candra, ST., MT',
@@ -337,7 +348,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Dosen::create([
-            'role_id' => 9,            
+            'role_id' => 9,
             'nip' => 197705102005011002,
             'password' => bcrypt('123456'),
             'nama' => 'Firdaus, S.T., M.T.',
@@ -345,7 +356,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'firdaus@eng.unri.ac.id',
         ]);
         Dosen::create([
-            'role_id' => 10,            
+            'role_id' => 10,
             'nip' => 198312032019031006,
             'password' => bcrypt('123456'),
             'nama' => 'Rahmat Rizal Andhi, S.T., M.T.',
@@ -353,7 +364,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'edisusilo.lecturer@unri.ac.id',
         ]);
         Dosen::create([
-            'role_id' => 11,            
+            'role_id' => 11,
             'nip' => 199110292019031010,
             'password' => bcrypt('123456'),
             'nama' => 'Edi Susilo, S.Pd., M.Kom., M.Eng',
@@ -369,7 +380,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123456'),
         ]);
 
-        Dosen::create([                       
+        Dosen::create([
             'nip' => 197207122000121002,
             'password' => bcrypt('123456'),
             'nama' => 'T. Yudi Hadiwandra, S.Kom., M.Kom',
@@ -377,7 +388,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'yudi.lecturer@unri.ac.id',
         ]);
 
-        Dosen::create([                   
+        Dosen::create([
             'nip' => 198005102005011003,
             'password' => bcrypt('123456'),
             'nama' => 'Dr. Irsan Taufik Ali, ST., MT',
@@ -385,133 +396,133 @@ class DatabaseSeeder extends Seeder
             'email' => 'anhar.lecturer@unri.ac.id',
         ]);
 
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 196707231999031001,
             'password' => bcrypt('123456'),
             'nama' => 'Rahyul Amri, ST., MT',
             'nama_singkat' => 'RA',
             'email' => 'rahyulamri.lecturer@unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197311271999032002,
             'password' => bcrypt('123456'),
             'nama' => 'Noveri Lysbetti Marpaung, ST., M.Sc.',
             'nama_singkat' => 'NL',
             'email' => 'noveri.marpaung@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197910152006042002,
             'password' => bcrypt('123456'),
             'nama' => 'Linna Oktaviana Sari, ST., MT',
             'nama_singkat' => 'LO',
             'email' => 'linnaoasari@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 198805052020122012,
             'password' => bcrypt('123456'),
             'nama' => 'Dian Ramadhani, S.T., M.T',
             'nama_singkat' => 'DR',
             'email' => 'dianramadhani@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197304011999032003,
             'password' => bcrypt('123456'),
             'nama' => 'Prof. Azriyenni, S.T., M.Eng., Ph.D',
             'nama_singkat' => 'AZ',
             'email' => 'azriyenni@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197807152003121006,
             'password' => bcrypt('123456'),
             'nama' => 'Iswadi HR, S.T., M.T., Ph.D.',
             'nama_singkat' => 'IH',
             'email' => 'iswadi.hr@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197802222002121003,
             'password' => bcrypt('123456'),
             'nama' => 'Dr. Febrizal, S.T., M.T.',
             'nama_singkat' => 'FZ',
             'email' => 'febrizal@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 196607311997021001,
             'password' => bcrypt('123456'),
             'nama' => 'Dr. Ir. Antonius Rajagukguk, M.T.',
             'nama_singkat' => 'AR',
             'email' => 'antonius.rajagukguk@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197403072002121002,
             'password' => bcrypt('123456'),
             'nama' => 'Indra Yasri, S.T., M.T., Ph.D',
             'nama_singkat' => 'IY',
             'email' => 'indra.yasri@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 196611021999031002,
             'password' => bcrypt('123456'),
             'nama' => 'Suwitno, S.T., M.T.',
             'nama_singkat' => 'SW',
             'email' => 'suwitno@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197408202002121001,
             'password' => bcrypt('123456'),
             'nama' => 'Nurhalim S.T., M.T.',
             'nama_singkat' => 'NH',
             'email' => 'nurhalim@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197803082003121001,
             'password' => bcrypt('123456'),
             'nama' => 'Dian Yayan Sukma, S.T., M.T.',
             'nama_singkat' => 'DY',
             'email' => 'dianyayan.sukma@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197402242000032001,
             'password' => bcrypt('123456'),
             'nama' => 'Ery Safrianti, S.T., M.T.',
             'nama_singkat' => 'DY',
             'email' => 'esafrianti@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197302012005012002,
             'password' => bcrypt('123456'),
             'nama' => 'Feranita , S.T., M.T.',
             'nama_singkat' => 'FN',
             'email' => 'feranita@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 199407102022032019,
             'password' => bcrypt('123456'),
             'nama' => 'R.A Rizka Qori Yuliani Putri S.ST., MT.',
             'nama_singkat' => 'RQ',
             'email' => 'rizkaqoriyulianiputri@lecturer.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 198002052003121001,
             'password' => bcrypt('123456'),
             'nama' => 'Dr. Fri Murdiya, S.T., M.T.',
             'nama_singkat' => 'FM',
             'email' => 'frimurdiya@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 196412151997021001,
             'password' => bcrypt('123456'),
             'nama' => 'Ir. Edy Ervianto, M.T.',
             'nama_singkat' => 'EE',
             'email' => 'edy.ervianto@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 196709081999031001,
             'password' => bcrypt('123456'),
             'nama' => 'Eddy Hamdani, S.T., M.T.',
             'nama_singkat' => 'EH',
             'email' => 'ehamdani@eng.unri.ac.id',
         ]);
-        Dosen::create([                        
+        Dosen::create([
             'nip' => 197208132000121001,
             'password' => bcrypt('123456'),
             'nama' => 'Budhi Anto, S.T., MT.',
@@ -583,6 +594,5 @@ class DatabaseSeeder extends Seeder
             'nama_barang' => 'Kunci C314',
             'jumlah' => 1
         ]);
-              
     }
 }
