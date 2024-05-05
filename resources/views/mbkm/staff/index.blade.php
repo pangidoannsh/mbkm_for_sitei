@@ -14,10 +14,19 @@
 
 @section('content')
     <div class="container card p-4">
-        <ol class="breadcrumb col-lg-12">
-            <li class="breadcrumb-item"><a class="breadcrumb-item active fw-bold text-black" href="#">MBKM</a></li>
-            <li class="breadcrumb-item"><a class="breadcrumb-item" href="{{ route('staff.riwayat') }}">Riwayat</a></li>
-        </ol>
+        <ul class="breadcrumb col-lg-12">
+            <li>
+                <a href="#" class="breadcrumb-item active fw-bold text-success px-1">
+                    Usulan
+                </a>
+            </li>
+            <span class="px-2">|</span>
+            <li>
+                <a href="{{ route('mbkm.staff.riwayat') }}" class="px-1">
+                    Riwayat
+                </a>
+            </li>
+        </ul>
         <div class="container-fluid">
             <table class="table table-responsive-lg table-bordered " id="datatables">
                 <thead class="table-dark">
@@ -71,12 +80,12 @@
                             <td class="text-center text-danger text-bold">{{ $km->batas }}</td>
                             <td class="text-center">
                                 @if ($km->status == 'Konversi diterima')
-                                    <form action="{{ route('staff.approve', $km->id) }}" method="POST">
+                                    <form action="{{ route('mbkm.staff.approve', $km->id) }}" method="POST">
                                         @csrf
                                         <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
                                             data-bs-toggle="tooltip" title="Lihat Detail"><i
                                                 class="fas fa-info-circle"></i></a>
-                                        <a href="{{ route('pdf', $km->id) }}" target="_blank"
+                                        <a href="{{ route('mbkm.pdf', $km->id) }}" target="_blank"
                                             class="badge btn btn-info p-1 mb-1" data-bs-toggle="tooltip"
                                             title="Print Surat Konversi"><i class="fas fa-print"></i></a>
                                         <button type="submit" class="badge btn btn-info p-1 mb-1"><i class="fas fa-check"

@@ -23,7 +23,8 @@
     @endif
 
     <div class="container-fluid">
-        <a href="{{ route('prodi') }}" class="badge bg-success p-2 mb-3 ">Kembali <a>
+        <a href="{{ (Auth::guard('dosen')->check() ? route('mbkm.prodi') : Auth::guard('mahasiswa')->check()) ? route('mbkm') : route('mbkm.staff') }}"
+            class="badge bg-success p-2 mb-3 ">Kembali <a>
     </div>
     @if ($mbkm->status == 'Usulan pengunduran diri' || $mbkm->status == 'Mengundurkan diri')
         <div class="card">
@@ -49,7 +50,7 @@
                 </div>
                 @if ($mbkm->status == 'Usulan pengunduran diri')
                     @if (Auth::guard('dosen')->check() && in_array(Auth::guard('dosen')->user()->role_id, [6, 7, 8]))
-                        <form action="{{ route('prodi.approvepengunduran', $mbkm->id) }}" method="POST"
+                        <form action="{{ route('mbkm.prodi.approvepengunduran', $mbkm->id) }}" method="POST"
                             style="display: inline;" id="pengunduran-diri" class="mt-3">
                             @csrf
                             <button type="submit" class="btn btn-success p-1 mb-1">
@@ -196,7 +197,7 @@
                     <button onclick="tolakUsulanmbkmKaprodi()" class="btn btn-danger badge p-2 px-3"
                         data-bs-toggle="tooltip" title="Tolak">Tolak</button>
                 </div>
-                <form action="{{ route('prodi.approveusulan', $mbkm->id) }}" class="setujui-usulankp-kaprodi"
+                <form action="{{ route('mbkm.prodi.approveusulan', $mbkm->id) }}" class="setujui-usulankp-kaprodi"
                     method="POST">
                     @csrf
                     <button class="btn btn-success badge p-2 px-3 mb-3">Setujui</i></button>
@@ -206,7 +207,7 @@
                     <button onclick="tolakUsulankonversiKaprodi()" class="btn btn-danger badge p-2 px-3"
                         data-bs-toggle="tooltip" title="Tolak">Tolak</button>
                 </div>
-                <form action="{{ route('prodi.approvekonversi', $mbkm->id) }}" class="setujui-usulankp-kaprodi"
+                <form action="{{ route('mbkm.prodi.approvekonversi', $mbkm->id) }}" class="setujui-usulankp-kaprodi"
                     method="POST">
                     @csrf
                     <button class="btn btn-success badge p-2 px-3 mb-3">Setujui</i></button>

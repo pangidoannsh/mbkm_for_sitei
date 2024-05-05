@@ -21,11 +21,25 @@
 
     <div class="container card p-4">
 
-        <ol class="breadcrumb col-lg-12">
-            <li class="breadcrumb-item"><a class="breadcrumb-item" href="{{ route('prodi') }}">MBKM</a></li>
-            <li class="breadcrumb-item"><a class="breadcrumb-item active fw-bold text-black"
-                    href="{{ route('prodi.riwayat') }}">Riwayat</a></li>
-        </ol>
+        <ul class="breadcrumb col-lg-12">
+            <li>
+                <a href="{{ route('mbkm.prodi') }}" class="breadcrumb-item">
+                    Usulan
+                </a>
+            </li>
+            <span class="px-2">|</span>
+            <li>
+                <a href="{{ route('mbkm.prodi.berjalan') }}" class="px-1">
+                    Berjalan
+                </a>
+            </li>
+            <span class="px-2">|</span>
+            <li>
+                <a href="#" class="px-1 active fw-bold text-success px-1">
+                    Riwayat
+                </a>
+            </li>
+        </ul>
 
         <div class="container-fluid">
 

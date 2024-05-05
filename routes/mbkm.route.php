@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Mbkm\ApprovalController;
 use App\Http\Controllers\Mbkm\LogbookController;
 use App\Http\Controllers\Mbkm\MbkmController;
@@ -24,7 +23,6 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
             Route::post('/sertifikat/create/konversi', [SertifikatMbkmController::class, 'storekonversi'])->name('mbkm.sertif.storekonversi');
             Route::delete('/sertifikat/create/{id}', [SertifikatMbkmController::class, 'destroykonversi'])->name('mbkm.sertif.destroykonversi');
 
-            Route::get("{mbkmId}/logbook", [LogbookController::class, 'index'])->name("mbkm.logbook");
             Route::post("logbook/{id}", [LogbookController::class, 'store'])->name("mbkm.logbook.store");
 
             Route::get('/undur-diri/{mbkm:id}', [MbkmController::class, 'undurDiri'])->name('mbkm.undurdiri');
@@ -33,6 +31,7 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
 
         Route::group(['middleware' => ['auth:dosen']], function () {
             Route::get('/prodi', [MbkmController::class, 'prodiIndex'])->name('mbkm.prodi');
+            Route::get('/berjalan', [MbkmController::class, 'mbkmBerjalan'])->name('mbkm.prodi.berjalan');
             Route::get('/riwayat', [MbkmController::class, 'prodiRiwayat'])->name('mbkm.prodi.riwayat');
             Route::post('/prodi/approve/{mbkm:id}', [ApprovalController::class, 'approveUsulan'])->name('mbkm.prodi.approveusulan');
             Route::post('/prodi/approvekonversi/{mbkm:id}', [ApprovalController::class, 'approveKonversi'])->name('mbkm.prodi.approvekonversi');
@@ -51,7 +50,7 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
             Route::get('/staff-print', [MbkmController::class, 'print'])->name('staff.print');
             Route::get('{mbkm:id}/donwload-konversi-pdf', [MbkmController::class, 'downloadPdf'])->name('mbkm.pdf');
         });
-
+        Route::get("{mbkmId}/logbook", [LogbookController::class, 'index'])->name("mbkm.logbook");
         Route::get('/{mbkm:id}', [MbkmController::class, 'detail'])->name('mbkm.detail');
         Route::delete('/{mbkm:id}', [MbkmController::class, 'destroy'])->name('mbkm.destroy');
     });

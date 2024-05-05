@@ -34,7 +34,7 @@ class MbkmController extends Controller
 
     public function prodiIndex()
     {
-        $mbkm = mbkm::where("status", "Usulan")
+        $mbkm = Mbkm::where("status", "Usulan")
             ->orWhere("status", "Usulan konversi nilai")
             ->orWhere("status", "Usulan pengunduran diri")
             ->get();
@@ -47,6 +47,11 @@ class MbkmController extends Controller
         return view('mbkm.staff.index', compact('mbkm'));
     }
 
+    public function mbkmBerjalan()
+    {
+        $mbkm = Mbkm::where("status", "Disetujui")->get();
+        return view('mbkm.prodi.berjalan', compact('mbkm'));
+    }
     public function mahasiswaRiwayat()
     {
         $mbkm = Mbkm::where('mahasiswa_nim', Auth::guard("mahasiswa")->user()->nim)
@@ -122,7 +127,7 @@ class MbkmController extends Controller
         $mbkm = Mbkm::where('id', $id)->first();
         $konversi = Konversi::where("mbkm_id", $mbkm->id)->get();
         $sertifikat = SertifikatMbkm::where("mbkm_id", $mbkm->id)->first();
-        return view('mahasiswa.detail', compact('mbkm', 'konversi', 'sertifikat'));
+        return view('mbkm.detail', compact('mbkm', 'konversi', 'sertifikat'));
     }
 
     public function destroy($id)
@@ -162,7 +167,7 @@ class MbkmController extends Controller
     {
         $mbkm = mbkm::findOrFail($id);
         $konversi = Konversi::where("mbkm_id", $id)->get();
-        $pdf = PDF::loadview('staff.print', compact('konversi', 'mbkm'));
+        $pdf = PDF::loadview('mbkm.print', compact('konversi', 'mbkm'));
         $pdf->setPaper('A4', 'potrait');
         return $pdf->stream('konversi.pdf');
     }

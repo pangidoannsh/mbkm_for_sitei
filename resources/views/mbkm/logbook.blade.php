@@ -22,7 +22,15 @@
 
     <div class="container-fluid">
 
-        <div class="card p-4">
+        <div class="card p-4 mbkm">
+            <div>
+                <div class="label">NIM</div>
+                <div class="value">{{ $mbkm->mahasiswa->nim }}</div>
+            </div>
+            <div class="my-2">
+                <div class="label">Nama</div>
+                <div class="value">{{ $mbkm->mahasiswa->nama }}</div>
+            </div>
             <table class="table table-responsive-lg table-bordered table-striped" width="100%" id="unorderer_datatables">
                 <thead class="table-dark">
                     <tr>
@@ -38,13 +46,15 @@
                                 @if ($lb->file)
                                     <a href="{{ asset('storage/' . $lb->file) }}" target="_blank">Lihat logbook</a>
                                 @else
-                                    <div class="text-secondary">
+                                    @if (optional(Auth::guard('mahasiswa')->user())->nim == $mbkm->mahasiswa_nim)
                                         <button class="btn btn-outline-success" title="Upload logbook" data-toggle="modal"
                                             data-target="#uploadLogbook{{ $lb->id }}">
                                             <i class="fa-solid fa-upload"></i>
                                             Upload Logbook
                                         </button>
-                                    </div>
+                                    @else
+                                        <div class="text-secondary">(Belum Menunggah Logbook)</div>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

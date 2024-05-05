@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" />
 
     <!-- <link rel="stylesheet" href="{{ asset('/assets/css/style.css') }}"> -->
+    <link rel="stylesheet" href="{{ asset('/assets/css/mbkm.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/assets/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/css/style.css?v=0.001') }}">
@@ -395,7 +396,12 @@
                                     <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }} "
                                         aria-current="page" href="/inventaris/peminjaman-dosen">INVENTARIS</a>
                                 </li>
-
+                                @if (in_array(Auth::guard('dosen')->user()->role_id, [6, 7, 8]))
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ Request::is('mbkm*') ? 'text-success' : '' }}"
+                                            aria-current="page" href="{{ route('mbkm.prodi') }}">MBKM</a>
+                                    </li>
+                                @endif
                                 {{-- DistribusiDokumen --}}
                                 @if (in_array(Auth::guard('dosen')->user()->role_id, [5, 6, 7, 8]))
                                     <li class="nav-item dropdown ">
@@ -492,7 +498,10 @@
                                     <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }} "
                                         aria-current="page" href="/inventaris/peminjamanmhs">INVENTARIS</a>
                                 </li>
-
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Request::is('mbkm*') ? 'text-success' : '' }}"
+                                        aria-current="page" href="{{ route('mbkm') }}">MBKM</a>
+                                </li>
                                 {{-- DistribusiDokumen --}}
                                 <li class="nav-item dropdown baru">
                                     <a id="dokumendropdown" href="{{ route('doc.index') }}"
@@ -558,6 +567,10 @@
                                     <li class="nav-item">
                                         <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }}"
                                             aria-current="page" href="/inventaris/peminjamanadm">INVENTARIS</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ Request::is('mbkm*') ? 'text-success' : '' }}"
+                                            aria-current="page" href="{{ route('mbkm.staff') }}">MBKM</a>
                                     </li>
 
                                     {{-- DistribusiDokumen --}}
@@ -2627,18 +2640,18 @@ $(document).ready(function() {
 
                 // Filter Bulan dan Tahun Mobile
                 $('#bulanFilterMobileRiwayatSeminarProdi, #tahunFilterMobileRiwayatSeminarProdi').on('change',
-                function() {
-                    var bulan = $('#bulanFilterMobileRiwayatSeminarProdi').val();
-                    var tahun = $('#tahunFilterMobileRiwayatSeminarProdi').val();
+                    function() {
+                        var bulan = $('#bulanFilterMobileRiwayatSeminarProdi').val();
+                        var tahun = $('#tahunFilterMobileRiwayatSeminarProdi').val();
 
-                    if (bulan || tahun) {
-                        // Filter berdasarkan bulan dan tahun
-                        table.column(4).search(bulan + ' ' + tahun, true, false).draw();
-                    } else {
-                        // Jika tidak ada bulan atau tahun yang dipilih, hapus filter
-                        table.column(4).search('').draw();
-                    }
-                });
+                        if (bulan || tahun) {
+                            // Filter berdasarkan bulan dan tahun
+                            table.column(4).search(bulan + ' ' + tahun, true, false).draw();
+                        } else {
+                            // Jika tidak ada bulan atau tahun yang dipilih, hapus filter
+                            table.column(4).search('').draw();
+                        }
+                    });
 
                 // Event handler untuk panjang menu
                 $('#lengthMenuRiwayatSeminarProdi').on('change', function() {
@@ -2737,18 +2750,18 @@ $(document).ready(function() {
 
                 // Filter Bulan dan Tahun
                 $('#bulanFilterRiwayatSeminarDibatalkan, #tahunFilterRiwayatSeminarDibatalkan').on('change',
-            function() {
-                    var bulan = $('#bulanFilterRiwayatSeminarDibatalkan').val();
-                    var tahun = $('#tahunFilterRiwayatSeminarDibatalkan').val();
+                    function() {
+                        var bulan = $('#bulanFilterRiwayatSeminarDibatalkan').val();
+                        var tahun = $('#tahunFilterRiwayatSeminarDibatalkan').val();
 
-                    if (bulan || tahun) {
-                        // Filter berdasarkan bulan dan tahun
-                        table.column(4).search(bulan + ' ' + tahun, true, false).draw();
-                    } else {
-                        // Jika tidak ada bulan atau tahun yang dipilih, hapus filter
-                        table.column(4).search('').draw();
-                    }
-                });
+                        if (bulan || tahun) {
+                            // Filter berdasarkan bulan dan tahun
+                            table.column(4).search(bulan + ' ' + tahun, true, false).draw();
+                        } else {
+                            // Jika tidak ada bulan atau tahun yang dipilih, hapus filter
+                            table.column(4).search('').draw();
+                        }
+                    });
 
                 // Filter Bulan dan Tahun Mobile
                 $('#bulanFilterMobileRiwayatSeminarDibatalkan, #tahunFilterMobileRiwayatSeminarDibatalkan').on('change',

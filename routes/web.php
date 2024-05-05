@@ -59,6 +59,7 @@ use App\Http\Controllers\PeminjamanPLPController;
 */
 
 include("doc.route.php");
+include("mbkm.route.php");
 
 Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::get('/detail-kp/{id}', [QRController::class, 'detailkp']);

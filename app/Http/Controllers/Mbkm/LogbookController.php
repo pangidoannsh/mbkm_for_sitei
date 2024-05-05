@@ -33,7 +33,7 @@ class LogbookController extends Controller
         $logbook->file = str_replace('public/', '', $file->store('public/logbook'));
         $logbook->update();
 
-        return back();
+        return redirect()->back();
     }
 
     static function generateMonthArray($startDate, $endDate)
