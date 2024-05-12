@@ -21,7 +21,10 @@
 
 
     <div class="container-fluid">
-
+        <div class="container-fluid">
+            <a href="{{ Auth::guard('dosen')->check() ? route('mbkm.prodi') : (Auth::guard('mahasiswa')->check() ? route('mbkm') : route('mbkm.staff')) }}"
+                class="badge bg-success p-2 mb-3 ">Kembali <a>
+        </div>
         <div class="card p-4 mbkm">
             <div>
                 <div class="label">NIM</div>

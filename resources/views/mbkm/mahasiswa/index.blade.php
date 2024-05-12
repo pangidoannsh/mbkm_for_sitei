@@ -319,6 +319,7 @@
                                         @break
 
                                         @case('Disetujui')
+                                        @case('Konversi ditolak')
                                             <div>
                                                 <a href="{{ route('mbkm.undurdiri', $km->id) }}" class="badge btn-danger"
                                                     data-bs-toggle="tooltip" title="Usulan pengunduran diri">
@@ -346,11 +347,10 @@
                         </tr>
                     @endforeach
                 </tbody>
-
-
             </table>
         </div>
     </div>
+    {{-- Modal Tambah Usulan --}}
     <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -426,7 +426,6 @@
                                     <div class="mb-3 field">
                                         <label class="form-label">Batas Waktu Penawaran</label>
                                         <input type="date" id="batas" name="batas" class="form-control ">
-
                                     </div>
                                 </div>
                             </div>
