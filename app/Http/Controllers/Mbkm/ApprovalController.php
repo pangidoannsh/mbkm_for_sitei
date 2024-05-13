@@ -38,9 +38,9 @@ class ApprovalController extends Controller
         return back();
     }
 
-    public function approveKonversi(Request $request, $id)
+    public function approveKonversi($id)
     {
-        $km = Mbkm::find($id);
+        $km = Mbkm::findOrFail($id);
         $km->status = 'Konversi diterima';
         $km->updated_at = date('Y-m-d H:i:s');
         $km->update();

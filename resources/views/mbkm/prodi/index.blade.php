@@ -94,18 +94,25 @@
                                             <button type="submit" class="badge btn btn-info p-1 mb-1"><i
                                                     class="fas fa-check" title="Setujui Usulan"></i></button>
                                         </form>
-                                        <button type="button" onclick="tolakUsulanmbkmKaprodi()" title="Tolak Usulan"
-                                            class="badge btn btn-danger p-1.5 mb-2"><i class="fas fa-times"></i></button>
+                                        <button title="Tolak Usulan" data-id="{{ $km->id }}"
+                                            class="badge btn btn-danger p-1.5 mb-2 show-tolak-usulan"><i
+                                                class="fas fa-times"></i>
+                                        </button>
                                     @elseif($km->status == 'Usulan konversi nilai')
                                         <form action="{{ route('mbkm.prodi.approvekonversi', $km->id) }}" method="POST"
                                             style="display: inline;">
                                             @csrf
                                             @method('post')
                                             <button type="submit" class="badge btn btn-info p-1 mb-1"><i
-                                                    class="fas fa-check"></i></button>
+                                                    class="fas fa-check" title="Setujui usulan konversi nilai"></i></button>
                                         </form>
-                                        <button type="button" onclick="tolakUsulankonversiKaprodi()" title="Tolak Konversi"
-                                            class="badge btn btn-danger p-1.5 mb-2"><i class="fas fa-times"></i></button>
+                                        {{-- Button Tolak Konversi --}}
+                                        <div>
+                                            <button title="Tolak Konversi" data-id="{{ $km->id }}"
+                                                class="badge btn btn-danger p-1.5 mb-2 show-tolak-konversi">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
                                     @elseif($km->status == 'Usulan pengunduran diri')
                                         <form action="{{ route('mbkm.prodi.approvepengunduran', $km->id) }}" method="POST"
                                             style="display: inline;" class="pengunduran-diri">
@@ -122,7 +129,6 @@
                     @endforeach
                 </tbody>
 
-
             </table>
         </div>
     </div>
@@ -131,7 +137,9 @@
 @push('scripts')
     @foreach ($mbkm as $km)
         <script>
-            function tolakUsulanmbkmKaprodi() {
+            $('.show-tolak-usulan').click((e) => {
+                const id = $(e.currentTarget).data("id");
+                e.preventDefault();
                 Swal.fire({
                     title: 'Tolak Usulan MBKM',
                     text: 'Apakah Anda Yakin?',
@@ -145,7 +153,7 @@
                         Swal.fire({
                             title: 'Tolak Usulan MBKM',
                             html: `
-                        <form id="reasonForm" action="{{ route('mbkm.prodi.tolakusulan', $km->id) }}" method="POST">
+                        <form id="reasonForm" action="/mbkm/prodi/tolakusulan/${id}" method="POST">
                         @method('put')
                             @csrf
                             <label for="catatan">Alasan Penolakan :</label>
@@ -160,9 +168,10 @@
                         });
                     }
                 });
-            }
-
-            function tolakUsulankonversiKaprodi() {
+            })
+            $('.show-tolak-konversi').click((e) => {
+                const id = $(e.currentTarget).data("id");
+                e.preventDefault();
                 Swal.fire({
                     title: 'Tolak Konversi MBKM',
                     text: 'Apakah Anda Yakin?',
@@ -176,7 +185,7 @@
                         Swal.fire({
                             title: 'Tolak Usulan MBKM',
                             html: `
-                        <form id="reasonForm" action="{{ route('mbkm.prodi.tolakkonversi', $km->id) }}" method="POST">
+                        <form id="reasonForm" action="/mbkm/prodi/tolakkonversi/${id}" method="POST">
                         @method('put')
                             @csrf
                             <label for="catatan">Alasan Penolakan :</label>
@@ -191,7 +200,7 @@
                         });
                     }
                 });
-            }
+            })
 
             $(".pengunduran-diri").submit((e) => {
                 const form = $(this).closest("form");
