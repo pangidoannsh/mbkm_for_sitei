@@ -46,6 +46,7 @@
         .col {
             float: left;
             width: 65%;
+            position: relative;
         }
 
         .bord {
@@ -79,6 +80,12 @@
             top: 7%;
             right: 73%;
             transform: translate(-50%, -50%);
+        }
+
+        .sign {
+            position: absolute;
+            top: 64px;
+            left: -184px;
         }
     </style>
 </head>
@@ -191,9 +198,9 @@
                         <td class="bord">{{ $konver->nama_nilai_matkul }}</td>
                         <td class="bord">{{ $konver->sks }}</td>
                         <td class="bord">{{ $konver->jenis_matkul }}</td>
-                        <td class="bord">{{ konversiNilai($konver->nilai_mbkm) }}</td>
+                        <td class="bord">{{ konversiNilai($konver->nilai_sks ?? 0) }}</td>
                         <td class="bord">4.00</td>
-                        <td class="bord">{{ konversiNilai($konver->nilai_mbkm) * $konver->sks }}</td>
+                        <td class="bord">{{ konversiNilai($konver->nilai_sks ?? 0) * $konver->sks }}</td>
                     </tr>
                 @endforeach
                 <tr style="font-weight: bold;">
@@ -219,7 +226,13 @@
                     <br><br><br>
                     <p>Dr. Feri Candra, ST.,MT <br>NIP. 19740428 200212 1 003</p>
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                    @if ($qrcode)
+                        <div class="sign">
+                            <img src="data:img/png;base64, {!! $qrcode !!}" style="width: 150%">
+                        </div>
+                    @endif
+                </div>
                 <div class="col">
                     <p>Pekanbaru, {{ Carbon::parse($mbkm->update_at)->translatedFormat('d F Y') }} <br>Dosen
                         Pembimbing Lapangan/<br> TIM MBKM Prodi Teknik Informatika

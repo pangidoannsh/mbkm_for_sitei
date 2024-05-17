@@ -287,7 +287,8 @@
                 <div class="d-flex flex-column gap-1">
                     <div class="label">Nama</div>
                     <div class="value text-capitalize">
-                        {{ data_get($surat, ($surat->jenis_user == 'plp' ? 'admin' : $surat->jenis_user) . '.nama') }}</div>
+                        {{ data_get($surat, ($surat->jenis_user == 'plp' ? 'admin' : $surat->jenis_user) . '.nama') }}
+                    </div>
                 </div>
                 @if (optional($surat->dosen)->role_id)
                     <div class="d-flex flex-column gap-1">

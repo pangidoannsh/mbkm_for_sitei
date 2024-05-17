@@ -1,9 +1,12 @@
-@extends('layouts.main')
+@extends('doc.main-layout')
+
 @php
     use Carbon\Carbon;
+    $link = 'https://' . $mbkm->rincian_link;
 @endphp
+
 @section('title')
-    Usulan Pengunduran Diri | SIA ELEKTRO
+    SITEI MBKM | Detail Mahasiswa
 @endsection
 
 @section('sub-title')
@@ -11,53 +14,85 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <a href="{{ url()->previous() }}" class="badge bg-success p-2 mb-3 "> Kembali <a>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="text-bold">Data MBKM</h5>
-                    <hr>
-                    <p class="card-title text-secondary text-sm ">Judul</p>
-                    <p class="card-text text-start">{{ $mbkm->judul }}</p>
-                    <p class="card-title text-secondary text-sm ">Lokasi</p>
-                    <p class="card-text text-start">{{ $mbkm->perusahaan }}
-                        <span class="text-secondary" style="font-size: 12px">({{ $mbkm->alamat }})</span>
-                    </p>
-                    <p class="card-title text-secondary text-sm ">Bidang Usaha/Kegiatan</p>
-                    <p class="card-text text-start">{{ $mbkm->bidang_usaha }}</p>
-                    <p class="card-title text-secondary text-sm ">Periode Kegiatan</p>
-                    <p class="card-text text-start">
+    <a href="{{ url()->previous() }}" class="btn btn-outline-success rounded-2 mb-3">Kembali </a>
+    <section class="row pb-5">
+        <div class="col-lg-6">
+            <div class="dokumen-card">
+                <div>
+                    <h2>Data MBKM</h2>
+                    <div class="divider-green"></div>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <div class="label">Judul</div>
+                    <div class="value text-capitalize">{{ $mbkm->judul }}</div>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <div class="label">Lokasi</div>
+                    <div class="value text-capitalize">
+                        {{ $mbkm->perusahaan }}
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <div class="label">Bidang Usaha/Kegiatan</div>
+                    <div class="value text-capitalize">
+                        {{ $mbkm->bidang_usaha }}
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <div class="label">Periode Kegiatan</div>
+                    <div class="value">
                         {{ Carbon::parse($mbkm->mulai_kegiatan)->translatedFormat('d F Y') .
                             ' - ' .
                             Carbon::parse($mbkm->selesai_kegiatan)->translatedFormat('d F Y') }}
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <form action="{{ route('mbkm.undurdiri.store', $mbkm->id) }}" id="form" method="POST"
-                enctype="multipart/form-data">
-                @csrf
-                @method('post')
-                <div class="mb-3">
-                    <label for="file" class="form-label">Surat Pengunduran Diri</label>
-                    <input class="form-control @error('file') is-invalid @enderror" type="file" accept=".jpg, .png, .pdf"
-                        id="file" name="file" required>
-                </div>
-                <div>
-                    <label for="alasan">Alasan Pengunduran Diri</label>
-                    <textarea name="alasan" id="alasan" rows="4" class="form-control" required></textarea>
-                </div>
-                <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-danger">Ajukan Pengunduran Diri</button>
-                </div>
-            </form>
+        {{-- Section Kanan --}}
+        <div class="col-lg-6">
+            <div class="dokumen-card">
+                <form action="{{ route('mbkm.undurdiri.store', $mbkm->id) }}" id="form" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('post')
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Surat Pengunduran Diri</label>
+                        <input class="form-control @error('file') is-invalid @enderror" type="file"
+                            accept=".jpg, .png, .pdf" id="file" name="file" required>
+                    </div>
+                    <div>
+                        <label for="alasan">Alasan Pengunduran Diri</label>
+                        <textarea name="alasan" id="alasan" rows="4" class="form-control" required></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-danger px-5 rounded-2">Ajukan Pengunduran Diri</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </section>
 @endsection
+
+@section('footer')
+    <section class="bg-dark p-1">
+        <div class="container">
+            <p class="developer">Dikembangkan oleh Prodi Teknik Informatika UNRI
+                (
+                <a class="text-success fw-bold" href="https://pangidoannsh.vercel.app" target="_blank">
+                    Muhammad Abdullah Qosim
+                </a>,
+                <a class="text-success fw-bold" href="https://pangidoannsh.vercel.app" target="_blank">
+                    Ilmi Fajar Ramadhan
+                </a>,dan
+                <a class="text-success fw-bold" href="https://pangidoannsh.vercel.app" target="_blank">
+                    Fitra Ramadhan
+                </a>
+                )
+            </p>
+        </div>
+    </section>
+@endsection
+
 @push('scripts')
     <script>
         $('#form').submit((e) => {

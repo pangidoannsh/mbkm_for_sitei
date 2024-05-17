@@ -60,7 +60,7 @@
                     @if ($pendaftaran_skripsi->status_skripsi == 'USULAN JUDUL')
                         <li class="step active">
                             <div>
-                                <i class="fas"></i>
+                                <i class="fas "></i>
                             </div>
                             <p class="mt-2"> USUL JUDUL</p>
                         </li>

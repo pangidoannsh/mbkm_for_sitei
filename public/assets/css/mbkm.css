@@ -37,3 +37,7 @@
     color: #424242;
     font-weight: 600;
 }
+
+.modal-dialog.modal-large {
+    max-width: 800px;
+}

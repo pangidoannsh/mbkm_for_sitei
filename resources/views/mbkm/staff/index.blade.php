@@ -62,7 +62,7 @@
                                     {{ $km->judul }}
                                 </div>
                             </td>
-                            @if ($km->status == 'Nilai sudah keluar')
+                            @if (in_array($km->status, ['Nilai sudah keluar', 'Konversi diterima']))
                                 <td class="text-center bg-success">{{ $km->status }}</td>
                             @elseif($km->status == 'Ditolak')
                                 <td class="text-center bg-danger">{{ $km->status }}</td>
@@ -79,21 +79,12 @@
                             </td>
                             <td class="text-center text-danger text-bold">{{ $km->batas }}</td>
                             <td class="text-center">
+                                <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
+                                    data-bs-toggle="tooltip" title="Lihat Detail"><i class="fas fa-info-circle"></i></a>
                                 @if ($km->status == 'Konversi diterima')
-                                    <form action="{{ route('mbkm.staff.approve', $km->id) }}" method="POST">
-                                        @csrf
-                                        <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
-                                            data-bs-toggle="tooltip" title="Lihat Detail"><i
-                                                class="fas fa-info-circle"></i></a>
-                                        <a href="{{ route('mbkm.pdf', $km->id) }}" target="_blank"
-                                            class="badge btn btn-info p-1 mb-1" data-bs-toggle="tooltip"
-                                            title="Print Surat Konversi"><i class="fas fa-print"></i></a>
-                                        <button type="submit" class="badge btn btn-info p-1 mb-1"><i class="fas fa-check"
-                                                title="Selesaikan MBKM"></i></button>
-                                    </form>
-                                @else
-                                    <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
-                                        data-bs-toggle="tooltip" title="Lihat Detail"><i class="fas fa-info-circle"></i></a>
+                                    <a href="{{ route('mbkm.pdf', $km->id) }}" target="_blank"
+                                        class="badge btn btn-success p-1 mb-1" data-bs-toggle="tooltip"
+                                        title="Print Surat Konversi"><i class="fas fa-print"></i></a>
                                 @endif
                             </td>
                         </tr>

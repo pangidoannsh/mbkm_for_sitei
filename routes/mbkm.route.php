@@ -4,6 +4,7 @@ use App\Http\Controllers\Mbkm\ApprovalController;
 use App\Http\Controllers\Mbkm\LogbookController;
 use App\Http\Controllers\Mbkm\MbkmController;
 use App\Http\Controllers\Mbkm\SertifikatMbkmController;
+use App\Http\Controllers\ProgramMbkmController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
@@ -21,7 +22,7 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
             Route::get('/{mbkm:id}/sertifikat/create', [SertifikatMbkmController::class, 'create'])->name('mbkm.sertif.create');
             Route::post('/sertifikat/create', [SertifikatMbkmController::class, 'store'])->name('mbkm.sertif.store');
             Route::post('/sertifikat/create/konversi', [SertifikatMbkmController::class, 'storekonversi'])->name('mbkm.sertif.storekonversi');
-            Route::delete('/sertifikat/create/{id}', [SertifikatMbkmController::class, 'destroykonversi'])->name('mbkm.sertif.destroykonversi');
+            Route::get('/sertifikat/create/{id}/delete', [SertifikatMbkmController::class, 'destroykonversi'])->name('mbkm.sertif.destroykonversi');
 
             Route::post("logbook/{id}", [LogbookController::class, 'store'])->name("mbkm.logbook.store");
 
@@ -34,6 +35,7 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
             Route::get('/berjalan', [MbkmController::class, 'mbkmBerjalan'])->name('mbkm.prodi.berjalan');
             Route::get('/riwayat', [MbkmController::class, 'prodiRiwayat'])->name('mbkm.prodi.riwayat');
             Route::post('/prodi/approve/{mbkm:id}', [ApprovalController::class, 'approveUsulan'])->name('mbkm.prodi.approveusulan');
+            Route::get('/prodi/approvekonversi/{mbkm:id}', [ApprovalController::class, 'konversi'])->name('mbkm.prodi.konversi');
             Route::post('/prodi/approvekonversi/{mbkm:id}', [ApprovalController::class, 'approveKonversi'])->name('mbkm.prodi.approvekonversi');
             Route::post('/prodi/approvepengunduran/{mbkm:id}', [ApprovalController::class, 'approvePengunduran'])->name('mbkm.prodi.approvepengunduran');
             Route::put('/prodi/tolakusulan/{mbkm:id}', [ApprovalController::class, 'tolakUsulan'])->name('mbkm.prodi.tolakusulan');
@@ -53,5 +55,10 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
         Route::get("{mbkmId}/logbook", [LogbookController::class, 'index'])->name("mbkm.logbook");
         Route::get('/{mbkm:id}', [MbkmController::class, 'detail'])->name('mbkm.detail');
         Route::delete('/{mbkm:id}', [MbkmController::class, 'destroy'])->name('mbkm.destroy');
+    });
+    Route::group(['middleware' => ['auth:web']], function () {
+        Route::get('/program-mbkm', [ProgramMbkmController::class, 'index'])->name('program-mbkm');
+        Route::post('/program-mbkm', [ProgramMbkmController::class, 'store'])->name('program-mbkm.store');
+        Route::delete('/program-mbkm/{id}', [ProgramMbkmController::class, 'delete'])->name('program-mbkm.delete');
     });
 });

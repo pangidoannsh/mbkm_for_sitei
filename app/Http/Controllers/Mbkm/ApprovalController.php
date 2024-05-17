@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Mbkm;
 
 use App\Http\Controllers\Controller;
+use App\Models\Mbkm\Konversi;
 use App\Models\Mbkm\Mbkm;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ApprovalController extends Controller
 {
@@ -12,7 +14,7 @@ class ApprovalController extends Controller
     {
         $km = Mbkm::find($id);
         $km->status = 'Disetujui';
-        $km->updated_at = date('Y-m-d H:i:s');
+        $km->tanggal_disetujui = date('Y-m-d H:i:s');
         $km->update();
         // Mengubah Status Usulan yang lainnya menjadi DITOLAK
         Mbkm::where("mahasiswa_nim", $km->mahasiswa_nim)
@@ -22,7 +24,8 @@ class ApprovalController extends Controller
                 "status" => "Ditolak",
                 "catatan" => "Salah satu usulan telah DITERIMA"
             ]);
-        return back();
+        Alert::success('Berhasil!', 'Berhasil menyetujui usulan MBKM')->showConfirmButton('Ok', '#28a745');
+        return redirect()->back();
     }
 
     public function tolakUsulan(Request $request, $id)
@@ -30,21 +33,30 @@ class ApprovalController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]);
+        // dd($request->all());
         $km = Mbkm::find($id);
         $km->status = 'Ditolak';
         $km->catatan = $request->catatan;
-        $km->updated_at = date('Y-m-d H:i:s');
         $km->update();
-        return back();
+        return redirect()->back();
     }
 
-    public function approveKonversi($id)
+    public function konversi($id)
     {
+        $mbkm = Mbkm::findOrFail($id);
+        $konversi = Konversi::where("mbkm_id", $id)->get();
+        return view("mbkm.prodi.konversi", compact("mbkm", "konversi"));
+    }
+    public function approveKonversi(Request $request, $id)
+    {
+        foreach ($request->nilai_disetujui as $key => $value) {
+            Konversi::where("id", $key)->update(["nilai_sks" => $value]);
+        }
         $km = Mbkm::findOrFail($id);
         $km->status = 'Konversi diterima';
         $km->updated_at = date('Y-m-d H:i:s');
         $km->update();
-        return back();
+        return redirect()->route("mbkm.prodi");
     }
 
     public function approveStaff($id)

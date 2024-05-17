@@ -61,7 +61,7 @@
                                     {{ $km->judul }}
                                 </div>
                             </td>
-                            @if ($km->status == 'Nilai sudah keluar')
+                            @if (in_array($km->status, ['Nilai sudah keluar', 'Konversi diterima']))
                                 <td class="text-center bg-success">{{ $km->status }}</td>
                             @elseif($km->status == 'Ditolak')
                                 <td class="text-center bg-danger">{{ $km->status }}</td>
@@ -77,13 +77,13 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                @if ($km->status == 'Nilai sudah keluar')
+                                <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
+                                    data-bs-toggle="tooltip" title="Lihat Detail"><i class="fas fa-info-circle"></i></a>
+                                @if ($km->status == 'Konversi diterima')
                                     <a href="{{ route('mbkm.pdf', $km->id) }}" target="_blank"
                                         class="badge btn btn-info p-1 mb-1" data-bs-toggle="tooltip"
                                         title="Print Surat Konversi"><i class="fas fa-print"></i></a>
                                 @endif
-                                <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
-                                    data-bs-toggle="tooltip" title="Lihat Detail"><i class="fas fa-info-circle"></i></a>
                             </td>
                         </tr>
                     @endforeach

@@ -26,14 +26,6 @@
                 class="badge bg-success p-2 mb-3 ">Kembali <a>
         </div>
         <div class="card p-4 mbkm">
-            <div>
-                <div class="label">NIM</div>
-                <div class="value">{{ $mbkm->mahasiswa->nim }}</div>
-            </div>
-            <div class="my-2">
-                <div class="label">Nama</div>
-                <div class="value">{{ $mbkm->mahasiswa->nama }}</div>
-            </div>
             <table class="table table-responsive-lg table-bordered table-striped" width="100%" id="unorderer_datatables">
                 <thead class="table-dark">
                     <tr>
@@ -47,11 +39,12 @@
                             <td class="text-center ">{{ Carbon::parse($lb->input_date)->translatedFormat('F Y') }}</td>
                             <td class="text-center ">
                                 @if ($lb->file)
-                                    <a href="{{ asset('storage/' . $lb->file) }}" target="_blank">Lihat logbook</a>
+                                    <a href="{{ asset('storage/' . $lb->file) }}" target="_blank"
+                                        class="btn btn-primary rounded-pill px-5">Lihat logbook</a>
                                 @else
                                     @if (optional(Auth::guard('mahasiswa')->user())->nim == $mbkm->mahasiswa_nim)
-                                        <button class="btn btn-outline-success" title="Upload logbook" data-toggle="modal"
-                                            data-target="#uploadLogbook{{ $lb->id }}">
+                                        <button class="btn btn-success rounded-pill px-4" title="Upload logbook"
+                                            data-toggle="modal" data-target="#uploadLogbook{{ $lb->id }}">
                                             <i class="fa-solid fa-upload"></i>
                                             Upload Logbook
                                         </button>

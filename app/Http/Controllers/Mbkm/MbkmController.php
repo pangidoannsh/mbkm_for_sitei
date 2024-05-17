@@ -9,11 +9,16 @@ use App\Models\Mbkm\Mbkm;
 use App\Models\Mbkm\Program;
 use App\Models\Mbkm\SertifikatMbkm;
 use App\Models\Prodi;
-use PDF;
+use App\Models\Semester;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\URL;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MbkmController extends Controller
 {
@@ -22,23 +27,19 @@ class MbkmController extends Controller
         $prodi = Prodi::all();
         $konsentrasi = Konsentrasi::all();
         $program = Program::all();
-        $mbkm = Mbkm::where('mahasiswa_nim', Auth::guard("mahasiswa")->user()->nim)
-            ->where(function ($query) {
-                $query->where("status", "!=", "Ditolak")
-                    ->where("status", "!=", "Mengundurkan diri")
-                    ->where("status", "!=", "Nilai sudah keluar");
-            })
-            ->orderBy("updated_at", "DESC")->get();
-        return view('mbkm.mahasiswa.index', compact('mbkm', 'prodi', 'konsentrasi', 'program'));
+        $mbkm = Mbkm::usulanMahasiswa(Auth::guard("mahasiswa")->user()->nim)->get();
+        $semesters = Semester::getSimpleSemester();
+        $countRiwayat = Mbkm::riwayatMahasiswa(Auth::guard("mahasiswa")->user()->nim)->count();
+        return view('mbkm.mahasiswa.index', compact('mbkm', 'prodi', 'konsentrasi', 'program', 'countRiwayat', 'semesters'));
     }
 
     public function prodiIndex()
     {
-        $mbkm = Mbkm::where("status", "Usulan")
-            ->orWhere("status", "Usulan konversi nilai")
-            ->orWhere("status", "Usulan pengunduran diri")
-            ->get();
-        return view('mbkm.prodi.index', compact('mbkm'));
+        $prodiId = Auth::guard("dosen")->user()->prodi_id;
+        $mbkm = Mbkm::usulanProdi($prodiId)->orderBy("batas", "asc")->get();
+        $countRiwayat = Mbkm::riwayatProdi($prodiId)->count();
+        $countBerjalan = Mbkm::berjalanProdi($prodiId)->count();
+        return view('mbkm.prodi.index', compact('mbkm', 'countRiwayat', 'countBerjalan'));
     }
 
     public function staffIndex()
@@ -49,36 +50,32 @@ class MbkmController extends Controller
 
     public function mbkmBerjalan()
     {
-        $mbkm = Mbkm::where("status", "Disetujui")->get();
-        return view('mbkm.prodi.berjalan', compact('mbkm'));
+        $prodiId = Auth::guard("dosen")->user()->prodi_id;
+        $countUsulan = Mbkm::usulanProdi($prodiId)->count();
+        $countRiwayat = Mbkm::riwayatProdi($prodiId)->count();
+        $mbkm = Mbkm::berjalanProdi($prodiId)->get();
+        return view('mbkm.prodi.berjalan', compact('mbkm', 'countUsulan', 'countRiwayat'));
     }
     public function mahasiswaRiwayat()
     {
-        $mbkm = Mbkm::where('mahasiswa_nim', Auth::guard("mahasiswa")->user()->nim)
-            ->where(function ($query) {
-                $query->where("status", "Ditolak")
-                    ->orWhere("status", "Mengundurkan diri")
-                    ->orWhere("status", "Nilai sudah keluar");
-            })
-            ->orderBy("created_at", "DESC")->get();
-        return view('mbkm.mahasiswa.riwayat', compact('mbkm'));
+        $mbkm = Mbkm::riwayatMahasiswa(Auth::guard("mahasiswa")->user()->nim)->get();
+        $countUsulan = Mbkm::usulanMahasiswa(Auth::guard("mahasiswa")->user()->nim)->count();
+        return view('mbkm.mahasiswa.riwayat', compact('mbkm', 'countUsulan'));
     }
 
     public function prodiRiwayat()
     {
-        $mbkm = mbkm::where("status", "Ditolak")
-            ->orWhere("status", "Nilai sudah keluar")
-            ->orWhere("status", "Konversi diterima")
-            ->orWhere("status", "Mengundurkan diri")
-            ->get();
-        return view('mbkm.prodi.riwayat', compact('mbkm'));
+        $prodiId = Auth::guard("dosen")->user()->prodi_id;
+        $mbkm = Mbkm::riwayatProdi($prodiId)->get();
+        $countUsulan = Mbkm::usulanProdi($prodiId)->count();
+        $countBerjalan = Mbkm::berjalanProdi($prodiId)->count();
+        return view('mbkm.prodi.riwayat', compact('mbkm', 'countUsulan', 'countBerjalan'));
     }
 
     public function staffRiwayat()
     {
-        $mbkm = mbkm::where("status", "Mengundurkan diri")
+        $mbkm = Mbkm::where("status", "Konversi diterima")
             ->orWhere("status", "Nilai sudah keluar")
-            ->orWhere("status", "Ditolak")
             ->get();
         return view('mbkm.staff.riwayat', compact('mbkm'));
     }
@@ -87,38 +84,58 @@ class MbkmController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'program_id' => 'required',
-            'periode_mbkm' => 'required',
+            'semester' => 'required',
             'perusahaan' => 'required',
             'alamat' => 'required',
             'bidang_usaha' => 'required',
             'judul' => 'required',
-            'rincian' => 'required',
+            'rincian' => 'mimes:pdf|max:200',
             'mulai_kegiatan' => 'required',
             'selesai_kegiatan' => 'required',
             'batas' => 'required',
         ]);
         $mahasiswa = Auth::guard("mahasiswa")->user();
         if ($validator->fails()) {
+            Alert::error('Gagal!', 'Gagal membuat usulan')->showConfirmButton('Ok', '#F27474');
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
+        $mahasiswa = Auth::guard("mahasiswa")->user();
         $rincian = $request->file('rincian');
-
-        $mbkm = Mbkm::create([
-            'mahasiswa_nim' => $mahasiswa->nim,
-            'program_id' => $request->program_id,
-            'periode_mbkm' => $request->periode_mbkm,
-            'prodi_id' => $request->prodi_id,
-            'konsentrasi_id' => $request->konsentrasi_id,
-            'perusahaan' => $request->perusahaan,
-            'alamat' => $request->alamat,
-            'bidang_usaha' => $request->bidang_usaha,
-            'judul' => $request->judul,
-            'mulai_kegiatan' => $request->mulai_kegiatan,
-            'selesai_kegiatan' => $request->selesai_kegiatan,
-            'rincian' => str_replace('public/', '', $rincian->store('public/mbkm')),
-            'batas' => $request->batas,
-
-        ]);
+        if ($rincian) {
+            Mbkm::create([
+                'mahasiswa_nim' => $mahasiswa->nim,
+                'program_id' => $request->program_id,
+                'semester' => $request->semester,
+                'prodi_id' => $mahasiswa->prodi_id,
+                'konsentrasi_id' => $mahasiswa->konsentrasi_id,
+                'perusahaan' => $request->perusahaan,
+                'alamat' => $request->alamat,
+                'bidang_usaha' => $request->bidang_usaha,
+                'judul' => $request->judul,
+                'mulai_kegiatan' => $request->mulai_kegiatan,
+                'selesai_kegiatan' => $request->selesai_kegiatan,
+                'rincian_link' => $request->rincian_link,
+                'rincian' => str_replace('public/', '', $rincian->store('public/mbkm')),
+                'batas' => $request->batas,
+            ]);
+        } else {
+            Mbkm::create([
+                'mahasiswa_nim' => $mahasiswa->nim,
+                'program_id' => $request->program_id,
+                'semester' => $request->semester,
+                'prodi_id' => $mahasiswa->prodi_id,
+                'konsentrasi_id' => $mahasiswa->konsentrasi_id,
+                'perusahaan' => $request->perusahaan,
+                'alamat' => $request->alamat,
+                'bidang_usaha' => $request->bidang_usaha,
+                'judul' => $request->judul,
+                'mulai_kegiatan' => $request->mulai_kegiatan,
+                'selesai_kegiatan' => $request->selesai_kegiatan,
+                'rincian_link' => $request->rincian_link,
+                'batas' => $request->batas,
+            ]);
+        }
+        Alert::success('Berhasil!', 'Berhasil membuat usulan baru')->showConfirmButton('Ok', '#28a745');
         return redirect()->route('mbkm');
     }
 
@@ -160,14 +177,16 @@ class MbkmController extends Controller
         $km = Mbkm::findOrFail($id);
         $km->status = 'Usulan konversi nilai';
         $km->update();
-        return back();
+        Alert::success('Berhasil!', 'Berhasil mengajukan konversi nilai')->showConfirmButton('Ok', '#28a745');
+        return redirect()->back();
     }
 
     public function downloadPdf($id)
     {
         $mbkm = mbkm::findOrFail($id);
         $konversi = Konversi::where("mbkm_id", $id)->get();
-        $pdf = PDF::loadview('mbkm.print', compact('konversi', 'mbkm'));
+        $qrcode = base64_encode(QrCode::format('svg')->size(80)->errorCorrection('H')->generate(URL::to('/mbkm') . '/' . encrypt($mbkm->id) . "/public"));
+        $pdf = PDF::loadview('mbkm.print', compact('konversi', 'mbkm', 'qrcode'));
         $pdf->setPaper('A4', 'potrait');
         return $pdf->stream('konversi.pdf');
     }

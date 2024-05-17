@@ -18,6 +18,7 @@
 
     <!-- <link rel="stylesheet" href="{{ asset('/assets/css/style.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('/assets/css/mbkm.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/css/dokumen.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/assets/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/css/style.css?v=0.001') }}">
@@ -750,6 +751,9 @@
 
                                                     <li class="nav-item"><a href="/mahasiswa"
                                                             class="dropdown-item nav-link {{ Request::is('mahasiswa*') ? 'text-success' : '' }}">Mahasiswa</a>
+                                                    <li class="nav-item"><a href="/program-mbkm"
+                                                            class="dropdown-item nav-link {{ Request::is('mahasiswa*') ? 'text-success' : '' }}">Program
+                                                            MBKM</a>
                                                     </li>
                                                     <li class="nav-item"><a href="#"
                                                             class="dropdown-item cursor-default nav-link"><b>Backup
@@ -965,7 +969,7 @@ $(document).ready(function() {
                             "sNext": "Selanjutnya",
                             "sLast": "Terakhir"
                         }
-                    }
+                    },
                 })
             });
         </script>

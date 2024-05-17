@@ -15,17 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string("mahasiswa_nim");
             $table->string("prodi_id");
-            $table->string("periode_mbkm");
+            $table->string("semester");
             $table->string("konsentrasi_id");
             $table->string("program_id");
             $table->string("perusahaan");
             $table->string("alamat");
             $table->string("bidang_usaha");
             $table->string("judul");
-            $table->string("rincian");
+            $table->string("rincian")->nullable();
+            $table->string("rincian_link")->nullable();
             $table->date("mulai_kegiatan");
             $table->date("selesai_kegiatan");
             $table->string("batas");
+            $table->date("tanggal_disetujui")->nullable();
+            $table->date("tanggal_dikonversi")->nullable();
             $table->string("alasan_undur_diri")->nullable();
             $table->string("surat_pengunduran")->nullable();
             $table->enum("status", [

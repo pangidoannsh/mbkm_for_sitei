@@ -2,7 +2,8 @@
 
 @php
     use Carbon\Carbon;
-    $currentMbkm = $mbkm->first();
+    $currentDate = Carbon::now();
+    $currentMbkm = $mbkm->where('status', '!=', 'Usulan')->first();
 @endphp
 
 @section('title')
@@ -26,7 +27,7 @@
             @if ($currentMbkm)
                 <div class="card card-timeline px-2 border-none">
                     <h5 class="text-center">
-                        <ul class="bs4-order-tracking my-5">
+                        <ul class="bs4-order-tracking w-100 my-5">
                             @if ($currentMbkm->status == 'Usulan')
                                 <li class="step">
                                     <div>
@@ -45,7 +46,7 @@
                                     <p class="mt-3"> KONVERSI NILAI </p>
                                 </li>
                                 <li class="step">
-                                    <div><i class="fas fa-truc"></i>
+                                    <div><i class="fas"></i>
                                     </div>
                                     <p class="mt-3"> SELESAI PROGRAM </p>
                                 </li>
@@ -53,7 +54,7 @@
                             @elseif ($currentMbkm->status == 'Disetujui')
                                 <li class="step active">
                                     <div>
-                                        <i class="fas"></i>
+                                        <i class="fas fa-check"></i>
                                     </div>
                                     <p class="mt-3"> USULAN MBKM</p>
                                 </li>
@@ -73,9 +74,9 @@
                                     <p class="mt-3"> SELESAI PROGRAM </p>
                                 </li>
                             @elseif ($currentMbkm->status == 'Ditolak')
-                                <li class="step aktip">
+                                <li class="step active">
                                     <div>
-                                        <i class="fas"></i>
+                                        <i class="fas fa-check"></i>
                                     </div>
                                     <p class="mt-3"> USULAN MBKM</p>
                                 </li>
@@ -98,12 +99,12 @@
                             @elseif ($currentMbkm->status == 'Usulan konversi nilai')
                                 <li class="step active">
                                     <div>
-                                        <i class="fas"></i>
+                                        <i class="fas fa-check"></i>
                                     </div>
                                     <p class="mt-3"> USULAN MBKM</p>
                                 </li>
                                 <li class="step active">
-                                    <div><i class="fas "></i>
+                                    <div><i class="fas fa-check"></i>
                                     </div>
                                     <p class="mt-3">UPLOAD SERTIFIKAT DAN NILAI</p>
                                 </li>
@@ -210,48 +211,45 @@
                         <div class="row biru mb-4">
                             <div class="col">
                                 <span class="mt-3 "> Tanggal Diterima <br></span>
-                                <span class="mt-3  text-warning">{{ $currentMbkm->batas }}</span>
+                                <span
+                                    class="mt-3  text-warning">{{ Carbon::parse($currentMbkm->tanggal_disetujui)->translatedFormat('l, d F Y') }}</span>
                             </div>
                             <div class="col"><span class="mt-1 text"> Batas Unggah <br></span>
-                                <strong class="mt-3 text-danger">Akhir Program<strong class="text-bold"
-                                        id="#"></strong><br></strong>
+                                <strong
+                                    class="mt-3 text-danger">{{ Carbon::parse($currentMbkm->selesai_kegiatan)->translatedFormat('l, d F Y') }}<strong
+                                        class="text-bold" id="#"></strong><br></strong>
                             </div>
-                            <div class="col"><span class="mt-1 text">Status Konversi <br></span>
-                                <strong class="mt-3 text-warning">Proses Konversi<strong class="text-bold"
-                                        id="#"></strong><br></strong>
+                            <div class="col"><span class="mt-1 text">Nilai Terkonversi<br></span>
+                                <strong
+                                    class="mt-3 text-danger">{{ Carbon::parse($currentMbkm->tanggal_dikonversi)->translatedFormat('l, d F Y') }}<strong
+                                        class="text-bold" id="#"></strong><br></strong>
                             </div>
+                            <div class="col"></div>
                         </div>
                     </h5>
                 </div>
             @endif
         @endif
-        @if (!$mbkm->pluck('status')->contains('Disetujui'))
-            <button type="button" class="btn btn-success float-left mt-4 " data-toggle="modal"
-                data-target="#staticBackdrop">
-                Tambah Usulan
+        @if ($mbkm->pluck('status')->contains('Usulan') || $mbkm->count() == 0)
+            <button type="button"
+                class="btn btn-success w-content mb-3 d-flex align-items-center justify-content-center fw-bold gap-2 rounded-2"
+                data-toggle="modal" data-target="#staticBackdrop">
+                <i class="fa-solid fa-plus"></i>
+                Usulan
             </button>
-            <br>
-            <br>
-            <br>
-        @else
-            @if ($currentMbkm)
-                <a href="{{ route('mbkm.logbook', $currentMbkm->id) }}" class="btn btn-success my-3">
-                    Logbook
-                </a>
-            @endif
         @endif
 
         <div class="card p-4">
             <ul class="breadcrumb col-lg-12">
                 <li>
                     <a href="#" class="breadcrumb-item active fw-bold text-success px-1">
-                        Usulan
+                        Usulan ({{ $mbkm->count() }})
                     </a>
                 </li>
                 <span class="px-2">|</span>
                 <li>
                     <a href="{{ route('mbkm.riwayat') }}" class="px-1">
-                        Riwayat
+                        Riwayat ({{ $countRiwayat }})
                     </a>
                 </li>
             </ul>
@@ -260,7 +258,7 @@
                     <tr>
                         <th class="text-center">NIM</th>
                         <th class="text-center">Nama</th>
-                        <th class="text-center">Periode Semester</th>
+                        <th class="text-center">Semester</th>
                         <th class="text-center">Jenis MBKM</th>
                         <th class="text-center">Lokasi MBKM</th>
                         <th class="text-center">Judul MBKM</th>
@@ -276,7 +274,7 @@
                         <tr>
                             <td class="text-center">{{ $km->mahasiswa->nim }}</td>
                             <td class="text-center">{{ $km->mahasiswa->nama }}</td>
-                            <td class="text-center">{{ $km->periode_mbkm }}</td>
+                            <td class="text-center">{{ $km->semester }}</td>
                             <td class="text-center">{{ $km->program->name }}</td>
                             <td class="text-center">{{ $km->perusahaan }}</td>
                             <td class="text-center ">{{ $km->judul }}</td>
@@ -297,7 +295,13 @@
                                     ' - ' .
                                     Carbon::parse($km->selesai_kegiatan)->translatedFormat('d/m/Y') }}
                             </td>
-                            <td class="text-center text-danger text-bold">{{ $km->batas }}</td>
+                            <td class="text-center text-danger text-bold">
+                                @if ($km->status == 'Usulan')
+                                    {{ $currentDate->diffInDays($km->batas) }} hari lagi
+                                @else
+                                    -
+                                @endif
+                            </td>
 
                             <td class="text-center"style="width: 56px">
                                 <div class="row row-cols-2 justify-content-center">
@@ -309,7 +313,7 @@
                                     @switch($km->status)
                                         @case('Usulan')
                                             <form action="{{ route('mbkm.destroy', $km->id) }}" method="POST"
-                                                style="display: inline;">
+                                                style="display: inline;" class="hapus-usulan">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="badge btn btn-danger p-1.5 mb-2">
@@ -332,12 +336,12 @@
                                                         width="25" src="/assets/img/add.png" alt="..."
                                                         class="zoom-image"></a>
                                             </div>
-                                            <form action="{{ route('mbkm.uploaded', $km->id) }}" method="POST"
-                                                style="display: inline;">
-                                                @csrf
-                                                <button type="submit" class="badge btn btn-info p-1 mb-1"><i
-                                                        class="fas fa-check" title="Ajukan Konversi"></i></button>
-                                            </form>
+                                            <div>
+                                                <a href="{{ route('mbkm.logbook', $km->id) }}" class="btn btn-success badge"
+                                                    title="Logbook">
+                                                    <i class="fa-solid fa-scroll"></i>
+                                                </a>
+                                            </div>
                                         @break
 
                                         @default
@@ -353,86 +357,103 @@
     {{-- Modal Tambah Usulan --}}
     <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Tambah Usulan MBKM</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+        <div class="modal-dialog modal-large">
+            <div class="modal-content p-4 rounded-4 d-flex flex-column gap-4">
                 <form action="{{ route('mbkm.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">
-                        <div>
-                            <div class="row">
-                                <div class="col-6-lg">
-                                    <div class="mb-3 field">
-                                        <input type="hidden" name="prodi_id" value="3">
-                                        <input type="hidden" name="konsentrasi_id" value="4">
+                    <h5 class="modal-title">Tambah Usulan MBKM</h5>
+                    <div class="divider-green mt-1"></div>
+                    <div class="d-flex flex-column gap-3 mt-4">
+                        <div class="field">
+                            <div class="field">
+                                <label for="semester" class="form-label">Semester
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select name="semester" id="semester"
+                                    class="text-secondary form-select rounded-3 text-capitalize @error('semester') border border-danger @enderror">
+                                    @foreach ($semesters as $semester)
+                                        <option value="{{ $semester->nama }}" class="text-capitalize"
+                                            {{ old('semester') == $semester->nama || $semesters->last()->nama == $semester->nama ? 'selected' : '' }}>
+                                            {{ $semester->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                                        <div class="mb-3 field">
-                                            <label class="form-label">Periode (Ganjil 2023)</label>
-                                            <input type="text" id="periode_mbkm" name="periode_mbkm"
-                                                class="form-control " required>
-
-                                        </div>
-                                        <label for="program" class="form-label">Program MBKM</label>
-                                        <select id="program_id" name="program_id" class="form-select" required>
-                                            @foreach ($program as $pro)
-                                                <option value="{{ $pro->id }}">{{ $pro->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3 field">
-                                        <label class="form-label">Lokasi (Perusahaan/Instansi)</label>
-                                        <input type="text" id="perusahaan" name="perusahaan" class="form-control "
-                                            required>
-
-                                    </div>
-                                    <div class="mb-3 field">
-                                        <label class="form-label">Alamat Perusahaan/Instansi</label>
-                                        <input type="text" id="alamat" name="alamat" class="form-control "
-                                            required>
-
-                                    </div>
-                                    <div class="mb-3 field">
-                                        <label class="form-label">Bidang Usaha</label>
-                                        <input type="text" id="bidang_usaha" name="bidang_usaha"
-                                            class="form-control " required>
-
-                                    </div>
-                                    <div class="mb-3 field">
-                                        <label class="form-label">Judul Kegiatan</label>
-                                        <input type="text" id="judul" name="judul" class="form-control"
-                                            required>
-                                    </div>
-                                    <div class="mb-3 field">
-                                        <label for="formFile" class="form-label">Rincian Kegiatan (PDF)</label>
-                                        <input class="form-control @error('rincian') is-invalid @enderror" type="file"
-                                            accept=".jpg, .png, .pdf" id="rincian" name="rincian" required>
-                                    </div>
-                                    <div class="mb-3 field">
-                                        <label class="form-label">Periode Kegiatan</label>
-                                        <div class="d-flex align-items-center" style="gap: 8px">
-                                            <input type="date" id="mulai_kegiatan" name="mulai_kegiatan"
-                                                class="form-control " required>
-                                            <span>-</span>
-                                            <input type="date" id="selesai_kegiatan" name="selesai_kegiatan"
-                                                class="form-control " required>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 field">
-                                        <label class="form-label">Batas Waktu Penawaran</label>
-                                        <input type="date" id="batas" name="batas" class="form-control ">
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success float-right mt-4">Usulkan</button>
+                        <div class="field">
+                            <label for="program" class="form-label">Program MBKM<span
+                                    class="text-danger">*</span></label>
+                            <select id="program_id" name="program_id" class="form-select" required>
+                                @foreach ($program as $pro)
+                                    <option value="{{ $pro->id }}">{{ $pro->name }}
+                                        {{ old('program_id') == $pro->id ? 'selected' : '' }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Lokasi (Perusahaan/Instansi)<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" id="perusahaan" name="perusahaan" class="form-control " required
+                                value="{{ old('perusahaan') }}">
+
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Alamat Perusahaan/Instansi<span class="text-danger">*</span></label>
+                            <input type="text" id="alamat" name="alamat" class="form-control " required
+                                value="{{ old('alamat') }}">
+
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Bidang Usaha<span class="text-danger">*</span></label>
+                            <input type="text" id="bidang_usaha" name="bidang_usaha" class="form-control " required
+                                value="{{ old('bidang_usaha') }}">
+
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Judul Kegiatan<span class="text-danger">*</span></label>
+                            <input type="text" id="judul" name="judul" class="form-control" required
+                                value="{{ old('judul') }}">
+                        </div>
+                        <div class="d-flex align-items-end gap-2">
+                            <div style="width :100%">
+                                <label for="formFile" class="form-label">Rincian Kegiatan (PDF)<span
+                                        class="">(max:200KB)</span></label>
+                                <input class="form-control @error('rincian') is-invalid @enderror" type="file"
+                                    accept=".jpg, .png, .pdf" id="rincian" name="rincian">
+                                @error('rincian')
+                                    <div class="invalid-feedback">{{ $message }} </div>
+                                @enderror
+                            </div>
+                            <span class="text-secondary" style="font-size: 14px">atau</span>
+                            <div style="width:100%">
+                                <label for="rincian_link" class="form-label">Link Rincian Kegiatan</label>
+                                <input placeholder="https://kampusmerdeka..."
+                                    class="form-control @error('rincian_link') is-invalid @enderror"id="rincian_link"
+                                    name="rincian_link" value="{{ old('rincian_link') }}">
+                                @error('rincian_link')
+                                    <div class="invalid-feedback">{{ $message }} </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Periode Kegiatan<span class="text-danger">*</span></label>
+                            <div class="d-flex align-items-center" style="gap: 8px">
+                                <input type="date" id="mulai_kegiatan" name="mulai_kegiatan" class="form-control "
+                                    required value="{{ old('mulai_kegiatan') }}">
+                                <span>-</span>
+                                <input type="date" id="selesai_kegiatan" name="selesai_kegiatan"
+                                    class="form-control " required value="{{ old('selesai_kegiatan') }}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Batas Waktu Penawaran<span class="text-danger">*</span></label>
+                            <input type="date" id="batas" name="batas" class="form-control "
+                                value="{{ old('batas') }}" required>
+                        </div>
+                        <button type="submit" class="rounded-3 btn mt-3 btn-success py-3">
+                            Usulkan
+                        </button>
                     </div>
                 </form>
             </div>
@@ -458,3 +479,25 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        $(".hapus-usulan").submit((e) => {
+            const form = $(this).closest("form");
+            e.preventDefault();
+            Swal.fire({
+                title: 'Hapus Usulan MBKM',
+                text: 'Lanjutkan penghapusan?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Setujui',
+                confirmButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.currentTarget.submit()
+                }
+            })
+        })
+    </script>
+@endpush
