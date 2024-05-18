@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mbkm;
 use App\Http\Controllers\Controller;
 use App\Models\Konsentrasi;
 use App\Models\Mbkm\Konversi;
+use App\Models\Mbkm\Logbook;
 use App\Models\Mbkm\Mbkm;
 use App\Models\Mbkm\Program;
 use App\Models\Mbkm\SertifikatMbkm;
@@ -144,6 +145,7 @@ class MbkmController extends Controller
         $mbkm = Mbkm::where('id', $id)->first();
         $konversi = Konversi::where("mbkm_id", $mbkm->id)->get();
         $sertifikat = SertifikatMbkm::where("mbkm_id", $mbkm->id)->first();
+        // $logbook = Logbook::where("mbkm_id",$id)->get();
         return view('mbkm.detail', compact('mbkm', 'konversi', 'sertifikat'));
     }
 

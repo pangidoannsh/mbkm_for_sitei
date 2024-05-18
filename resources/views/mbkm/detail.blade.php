@@ -311,6 +311,12 @@
 
 @push('scripts')
     <script>
+        const sertif = @json($sertifikat);
+        const konversi = @json($konversi);
+        const error = []
+        if (sertif === null) error.push("Upload sertifikat")
+        if (konversi.length === 0) error.push("Menambahkan mata kuliah konversi")
+
         $("#setujui-usulan").submit((e) => {
             const form = $(this).closest("form");
             e.preventDefault();
@@ -331,19 +337,29 @@
         $("#ajukan-konversi").submit(e => {
             const form = $(this).closest("form");
             e.preventDefault();
-            Swal.fire({
-                title: 'Usulan Konversi Nilai',
-                text: 'Lanjutkan Pengajuan?',
-                icon: 'question',
-                showCancelButton: true,
-                cancelButtonText: 'Batal',
-                confirmButtonText: 'Ajukan',
-                confirmButtonColor: '#28a745'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.currentTarget.submit()
-                }
-            })
+            if (error.length === 0) {
+                Swal.fire({
+                    title: 'Usulan Konversi Nilai',
+                    text: 'Lanjutkan Pengajuan?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Ajukan',
+                    confirmButtonColor: '#28a745'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        e.currentTarget.submit()
+                    }
+                })
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Pengajuan gagal",
+                    text: 'Anda belum ' + error.join(" dan "),
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
         })
         $("#setujui-pengunduran-diri").submit((e) => {
             const form = $(this).closest("form");
