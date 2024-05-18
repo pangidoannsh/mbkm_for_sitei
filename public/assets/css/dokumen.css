@@ -18,6 +18,10 @@ th {
     max-width: max-content;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .table td,
 .table th {
     padding: 12px 16px;

@@ -17,65 +17,81 @@
     </div>
     <form action="{{ route('mbkm.sertif.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="d-flex flex-column gap-3">
-            @if ($sertifikat)
-                <div class="d-flex flex-column gap-2">
-                    <h4 class="fw-bold">Sertifikat</h4>
-                    <div>
-                        <a target="_blank" href="{{ asset('storage/' . $sertifikat->file) }}"
-                            class="btn-outline-success btn px-5 rounded-2">Lihat Sertifikat</a>
+        <div class="dokumen-card">
+            <h2>Sertifikat dan Konversi Nilai</h2>
+            <div class="divider-green"></div>
+            <div class="d-flex flex-column gap-3">
+                @if ($sertifikat)
+                    <div class="d-flex flex gap-2">
+                        <div>
+                            <a target="_blank" href="{{ asset('storage/' . $sertifikat->file) }}"
+                                class="btn-outline-success btn px-5 rounded-2">Lihat Sertifikat</a>
+                        </div>
+                        <button type="button" class="btn text-warning" title="Ubah Sertifikat" id="edit-sertif">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
                     </div>
-                </div>
-            @endif
-            <div class="row">
-                <div class="col-6-lg">
-                    <div class="mb-3">
-                        <label for="file" class="form-label">
-                            @if ($sertifikat)
-                                Ubah
-                            @endif Sertifikat
-                        </label>
-                        <input type="hidden" value="{{ $mbkmId }}" name="mbkm_id">
-                        <input class="form-control @error('file') is-invalid @enderror" type="file"
-                            accept=".jpg, .png, .pdf" id="file" name="file">
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <label for="formFile" class="form-label mt-5">Konversi Nilai</label>
-        <table class="table table-responsive-lg table-bordered table-striped" width="100%">
-            <thead class="table-dark">
-                <tr>
-                    <th class="text-center" scope="col">NO</th>
-                    <th class="text-center" scope="col">Mata Kuliah Yang Di Konversi (UNRI)</th>
-                    <th class="text-center" scope="col">Kriteria Penilaian MBKM</th>
-                    <th class="text-center" scope="col">Nilai MBKM</th>
-                    <th class="text-center" scope="col">Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="body-table">
-                @foreach ($konversi as $kr)
-                    <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
-                        <td class="text-center">{{ $kr->nama_nilai_mbkm }}</td>
-                        <td class="text-center">{{ $kr->nilai_mbkm }}</td>
-                        <td class="text-center">
-                            <div>
-                                <button type="button" data-id="{{ $kr->id }}"
-                                    class="badge btn btn-danger p-1.5 mb-2 delete-konversi"><i
-                                        class="fas fa-times"></i></button>
+                    <div class="row d-none" id="edit-sertif-card">
+                        <div class="col-6-lg">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <label for="file" class="form-label">Ubah Sertifikat</label>
+                                    <span type="button" class="text-secondary pointer" id="cancel-edit">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                    </span>
+                                </div>
+                                <input type="hidden" value="{{ $mbkmId }}" name="mbkm_id">
+                                <input class="form-control @error('file') is-invalid @enderror" type="file"
+                                    accept=".jpg, .png, .pdf" id="file" name="file">
                             </div>
-                        </td>
+                        </div>
+                    </div>
+                @else
+                    <div class="row">
+                        <div class="col-6-lg">
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Sertifikat</label>
+                                <input type="hidden" value="{{ $mbkmId }}" name="mbkm_id">
+                                <input class="form-control @error('file') is-invalid @enderror" type="file"
+                                    accept=".jpg, .png, .pdf" id="file" name="file">
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+            </div>
+            <label>Konversi Nilai</label>
+            <table class="table table-responsive-lg table-bordered table-striped" width="100%">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center" scope="col">NO</th>
+                        <th class="text-center" scope="col">Mata Kuliah Yang Di Konversi (UNRI)</th>
+                        <th class="text-center" scope="col">Kriteria Penilaian MBKM</th>
+                        <th class="text-center" scope="col">Nilai MBKM</th>
+                        <th class="text-center" scope="col">Aksi</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div>
+                </thead>
+                <tbody id="body-table">
+                    @foreach ($konversi as $kr)
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
+                            <td class="text-center">{{ $kr->nama_nilai_mbkm }}</td>
+                            <td class="text-center">{{ $kr->nilai_mbkm }}</td>
+                            <td class="text-center">
+                                <div>
+                                    <button type="button" data-id="{{ $kr->id }}"
+                                        class="badge btn btn-danger p-1.5 mb-2 delete-konversi"><i
+                                            class="fas fa-times"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
             <div class="d-flex justify-content-center" id="btnAddKonversiContainer">
                 <button id="btnAddKonversi" type="button"
-                    class="text-secondary mt-2 btn-text text-center success d-flex align-items-center gap-1">
+                    class="text-secondary btn-text text-center success d-flex align-items-center gap-1">
                     <div><i class="fa-solid fa-plus"></i></div>
                     <div>Konversi</div>
                 </button>
@@ -142,6 +158,13 @@
                     window.location.href = `/mbkm/sertifikat/create/${id}/delete`
                 }
             })
+        })
+        const editSertifCard = $("#edit-sertif-card")
+        $("#edit-sertif").click(e => {
+            editSertifCard.removeClass("d-none")
+        })
+        $("#cancel-edit").click(e => {
+            editSertifCard.addClass("d-none")
         })
     </script>
 @endpush
