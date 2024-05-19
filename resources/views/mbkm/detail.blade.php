@@ -237,7 +237,7 @@
                                 <th class="text-center" scope="col">Nama Mata Kuliah</th>
                                 <th class="text-center" scope="col">Nama Nilai MBKM</th>
                                 <th class="text-center" scope="col">Nilai Konversi</th>
-                                @if (in_array($mbkm->status, ['Usulan disetujui', 'Konversi ditolak']))
+                                @if (in_array($mbkm->status, ['Usulan disetujui', 'Konversi ditolak']) && Auth::guard('mahasiswa')->check())
                                     <th class="text-center" scope="col">Aksi</th>
                                 @endif
                             </tr>
@@ -255,7 +255,7 @@
                                             {{ $kr->nilai_mbkm }}
                                         @endif
                                     </td>
-                                    @if (in_array($mbkm->status, ['Usulan disetujui', 'Konversi ditolak']))
+                                    @if (in_array($mbkm->status, ['Usulan disetujui', 'Konversi ditolak']) && Auth::guard('mahasiswa')->check())
                                         <td class="text-center">
                                             <form onsubmit="return confirm(' Hapus package? ');"
                                                 action="{{ route('mbkm.sertif.destroykonversi', [$kr->id]) }}"
