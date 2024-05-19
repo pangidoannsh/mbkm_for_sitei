@@ -30,7 +30,7 @@
             <span class="px-2">|</span>
             <li>
                 <a href="{{ route('mbkm.prodi.berjalan') }}" class="px-1">
-                    Berjalan ({{ $countBerjalan }})
+                    Bimbingan ({{ $countBerjalan }})
                 </a>
             </li>
             <span class="px-2">|</span>

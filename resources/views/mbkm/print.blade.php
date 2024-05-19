@@ -6,6 +6,36 @@
         $nilaiBasis4 = $nilaiBasis4 = round($nilai / 25, 2);
         return $nilaiBasis4;
     }
+
+    function konversiNilaiKeHuruf($nilai)
+    {
+        $numericGrade = konversiNilai($nilai);
+        $gradeMap = [
+            'A' => 4.0,
+            'A-' => 3.75,
+            'B+' => 3.5,
+            'B' => 3.0,
+            'B-' => 2.75,
+            'C+' => 2.5,
+            'C' => 2.0,
+            'D' => 1.0,
+            'E' => 0.0,
+            'T' => 0.0,
+        ];
+
+        // Mengurutkan grade map berdasarkan nilai terbalik untuk rentang nilai
+        krsort($gradeMap);
+        // Cari nilai huruf yang sesuai
+        foreach ($gradeMap as $letterGrade => $value) {
+            if ($numericGrade <= $value) {
+                return $letterGrade;
+            }
+        }
+
+        // Jika nilai lebih rendah dari rentang terendah
+        return 'Invalid grade';
+    }
+    // dd(konversiNilaiKeHuruf(91));
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -198,8 +228,8 @@
                         <td class="bord">{{ $konver->nama_nilai_matkul }}</td>
                         <td class="bord">{{ $konver->sks }}</td>
                         <td class="bord">{{ $konver->jenis_matkul }}</td>
+                        <td class="bord">{{ konversiNilaiKeHuruf($konver->nilai_sks ?? 0) }}</td>
                         <td class="bord">{{ konversiNilai($konver->nilai_sks ?? 0) }}</td>
-                        <td class="bord">4.00</td>
                         <td class="bord">{{ konversiNilai($konver->nilai_sks ?? 0) * $konver->sks }}</td>
                     </tr>
                 @endforeach

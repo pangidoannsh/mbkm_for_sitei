@@ -67,6 +67,7 @@ class Mbkm extends Model
                 $query->where("status", "Usulan")->where("batas", ">=", Carbon::today());
             })
                 ->orWhere("status", "Usulan konversi nilai")
+                ->orWhere("status", "Konversi ditolak")
                 ->orWhere("status", "Usulan pengunduran diri");
         })->where("prodi_id", $prodiId);
     }
@@ -86,6 +87,7 @@ class Mbkm extends Model
         return  self::where("prodi_id", $prodiId)->where(function ($query) {
             $query->where("status", "Disetujui")
                 ->orWhere("status", "Usulan konversi nilai")
+                ->orWhere("status", "Konversi ditolak")
                 ->orWhere("status", "Usulan konversi nilai");
         });
     }

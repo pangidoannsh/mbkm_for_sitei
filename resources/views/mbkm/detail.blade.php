@@ -18,7 +18,12 @@
 @endsection
 
 @section('content')
-    <a href="{{ url()->previous() }}" class="badge bg-success p-2 mb-3 "> Kembali </a>
+    <a href="@if (Auth::guard('dosen')->check()) {{ route('mbkm.prodi') }}
+    @elseif(Auth::guard('web')->check())
+    {{ route('mbkm.staff') }}
+    @else
+        {{ route('mbkm') }} @endif"
+        class="badge bg-success p-2 mb-3 "> Kembali </a>
 
     @if ($mbkm->status == 'Usulan pengunduran diri')
         <div class="dokumen-card mb-3">
@@ -153,7 +158,7 @@
                         </div>
                     </div>
                 @endif
-                @if ($mbkm->status == 'Usulan')
+                @if ($mbkm->status == 'Usulan' && in_array(optional(Auth::guard('dosen')->user())->role_id, [6, 7, 8]))
                     <hr>
                     <form action="{{ route('mbkm.prodi.approveusulan', $mbkm->id) }}" method="POST"
                         style="display: inline" id="setujui-usulan" class="d-flex">

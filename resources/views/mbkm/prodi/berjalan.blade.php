@@ -29,7 +29,7 @@
             <span class="px-2">|</span>
             <li>
                 <a href="{{ route('mbkm.prodi.berjalan') }}" class="px-1 breadcrumb-item active fw-bold text-success">
-                    Berjalan ({{ $mbkm->count() }})
+                    Bimbingan ({{ $mbkm->count() }})
                 </a>
             </li>
             <span class="px-2">|</span>

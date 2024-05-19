@@ -30,7 +30,7 @@
             <span class="px-2">|</span>
             <li>
                 <a href="{{ route('mbkm.prodi.berjalan') }}" class="px-1">
-                    Berjalan ({{ $countBerjalan }})
+                    Bimbingan ({{ $countBerjalan }})
                 </a>
             </li>
             <span class="px-2">|</span>
@@ -86,7 +86,7 @@
                                 </td>
                                 <td class="text-center text-danger text-bold">
                                     @if ($km->status === 'Usulan')
-                                        @if ($currentDate <= $km->bata)
+                                        @if ($currentDate <= $km->batas)
                                             {{ $currentDate->diffInDays($km->batas, false) + 1 }} hari lagi
                                         @else
                                             Melewati Batas Waktu

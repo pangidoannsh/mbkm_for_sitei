@@ -118,14 +118,14 @@
                                     </div>
                                     <p class="mt-3"> SELESAI PROGRAM </p>
                                 </li>
-                            @elseif ($currentMbkm->status == 'Konversi Ditolak')
+                            @elseif ($currentMbkm->status == 'Konversi ditolak')
                                 <li class="step active">
                                     <div>
                                         <i class="fas"></i>
                                     </div>
                                     <p class="mt-3"> USULAN MBKM</p>
                                 </li>
-                                <li class="step aktip">
+                                <li class="step active">
                                     <div><i class="fas "></i>
                                     </div>
                                     <p class="mt-3">UPLOAD SERTIFIKAT DAN NILAI</p>
@@ -297,9 +297,9 @@
                             </td>
                             <td class="text-center text-danger text-bold">
                                 @if ($km->status == 'Usulan')
-                                    {{ $currentDate->diffInDays($km->batas) }} hari lagi
+                                    {{ $currentDate->diffInDays($km->batas, false) + 1 }} hari lagi
                                 @else
-                                    -
+                                    0 hari
                                 @endif
                             </td>
 

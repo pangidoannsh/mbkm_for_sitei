@@ -145,7 +145,7 @@ class MbkmController extends Controller
         $mbkm = Mbkm::where('id', $id)->first();
         $konversi = Konversi::where("mbkm_id", $mbkm->id)->get();
         $sertifikat = SertifikatMbkm::where("mbkm_id", $mbkm->id)->first();
-        // $logbook = Logbook::where("mbkm_id",$id)->get();
+        $logbook = Logbook::where("mbkm_id", $id)->get();
         return view('mbkm.detail', compact('mbkm', 'konversi', 'sertifikat'));
     }
 
@@ -177,6 +177,15 @@ class MbkmController extends Controller
     public function uploaded(Request $request, $id)
     {
         $km = Mbkm::findOrFail($id);
+        $logbooks = Logbook::where("mbkm_id", $id)->get();
+        $hasEmptyFileField = $logbooks->contains(function ($logbook) {
+            return is_null($logbook->file);
+        });
+
+        if ($hasEmptyFileField) {
+            Alert::error('Gagal!', 'Logbook anda belum lengkap')->showConfirmButton('Ok', '#F27474');
+            return redirect()->back();
+        }
         $km->status = 'Usulan konversi nilai';
         $km->update();
         Alert::success('Berhasil!', 'Berhasil mengajukan konversi nilai')->showConfirmButton('Ok', '#28a745');
