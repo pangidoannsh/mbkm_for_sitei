@@ -42,7 +42,8 @@
         </ul>
 
         <div class="container-fluid">
-
+            <h5>Riwayat Selesai</h5>
+            <hr>
             <table class="table table-responsive-lg table-bordered table-striped" width="100%" id="datatables">
                 <thead class="table-dark">
                     <tr>
@@ -96,6 +97,9 @@
     </div>
     <div class="container card p-4">
         <div class="container-fluid">
+            <h5>Riwayat Ditolak</h5>
+            <hr>
+
             <table class="table table-responsive-lg table-bordered table-striped" width="100%" id="datatables2">
                 <thead class="table-dark">
                     <tr>

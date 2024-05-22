@@ -78,14 +78,28 @@
                                 </div>
                             </td>
                             <td class="text-center text-danger text-bold">{{ $km->batas }}</td>
-                            <td class="text-center">
-                                <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1 mb-1"
-                                    data-bs-toggle="tooltip" title="Lihat Detail"><i class="fas fa-info-circle"></i></a>
-                                @if ($km->status == 'Konversi diterima')
-                                    <a href="{{ route('mbkm.pdf', $km->id) }}" target="_blank"
-                                        class="badge btn btn-success p-1 mb-1" data-bs-toggle="tooltip"
-                                        title="Print Surat Konversi"><i class="fas fa-print"></i></a>
-                                @endif
+                            <td class="text-center" style="width: 56px">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <div>
+                                        <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1"
+                                            data-bs-toggle="tooltip" title="Lihat Detail"><i
+                                                class="fas fa-info-circle"></i></a>
+                                    </div>
+                                    @if ($km->status == 'Konversi diterima')
+                                        <div>
+                                            <a href="{{ route('mbkm.pdf', $km->id) }}" target="_blank"
+                                                class="badge btn btn-success p-1" data-bs-toggle="tooltip"
+                                                title="Print Surat Konversi"><i class="fas fa-print"></i></a>
+                                        </div>
+                                    @endif
+                                    <form action="{{ route('mbkm.staff.approve', $km->id) }}" method="POST"
+                                        class="selesaikan-mbkm">
+                                        @csrf
+                                        <button type="submit" class="badge btn btn-success p-1" title="Selesaikan MBKM">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -94,3 +108,25 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(".selesaikan-mbkm").click(e => {
+            const form = $(this).closest("form");
+
+            e.preventDefault()
+            Swal.fire({
+                title: 'Selesaikan MBKM',
+                text: 'Lanjutkan penyelesaian MBKM?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya',
+                confirmButtonColor: '#28a745'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.currentTarget.submit()
+                }
+            })
+        })
+    </script>
+@endpush

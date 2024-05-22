@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mbkm;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mbkm\Konversi;
+use App\Models\Mbkm\Logbook;
 use App\Models\Mbkm\MataKuliah;
 use App\Models\Mbkm\Mbkm;
 use App\Models\Mbkm\SertifikatMbkm;
@@ -11,13 +12,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SertifikatMbkmController extends Controller
 {
     public function create($id)
     {
-        $mbkm = Mbkm::where("id", $id)->where("status", "!=", "Usulan");
-        if ($mbkm->count() === 0) return abort(404);
+        // Cek ada tidaknya data mbkm
+        $mbkm = Mbkm::findOrFail($id);
+
+        // Cek logbook telah lengkap
+        $logbooks = Logbook::where("mbkm_id", $id)->get();
+        $hasEmptyFileField = $logbooks->contains(function ($logbook) {
+            return is_null($logbook->file);
+        });
+        if ($hasEmptyFileField) {
+            Alert::error('Gagal!', 'Logbook anda belum lengkap')->showConfirmButton('Ok', '#F27474');
+            return redirect()->back();
+        }
+
+
         $matkul = MataKuliah::all();
         $mahasiswa = Auth::guard("mahasiswa")->user();
         $konversi = Konversi::where("mbkm_id", $id)->get();
@@ -47,7 +61,6 @@ class SertifikatMbkmController extends Controller
             }
         }
         $konversi = $request->konversi;
-        // Konversi::where("mbkm_id", $request->mbkm_id)->delete();
         if (is_array($konversi)) {
             foreach ($konversi as $value) {
                 $matkul = MataKuliah::findOrFail($value["matkul"]);
@@ -62,7 +75,8 @@ class SertifikatMbkmController extends Controller
                 ]);
             }
         }
-        return redirect()->back();
+        Mbkm::find($request->mbkm_id)->update(["status" => "Usulan konversi nilai"]);
+        return redirect()->route("mbkm");
     }
 
     public function storekonversi(Request $request)

@@ -45,7 +45,10 @@ class MbkmController extends Controller
 
     public function staffIndex()
     {
-        $mbkm = mbkm::where("status", "Konversi diterima")->get();
+        $user = Auth::guard("web")->user();
+        if (!in_array($user->role_id, [2, 3, 4])) return abort(403);
+
+        $mbkm = Mbkm::usulanStaf($user->role_id - 1)->get();
         return view('mbkm.staff.index', compact('mbkm'));
     }
 
@@ -75,9 +78,10 @@ class MbkmController extends Controller
 
     public function staffRiwayat()
     {
-        $mbkm = Mbkm::where("status", "Konversi diterima")
-            ->orWhere("status", "Nilai sudah keluar")
-            ->get();
+        $user = Auth::guard("web")->user();
+        if (!in_array($user->role_id, [2, 3, 4])) return abort(403);
+
+        $mbkm = Mbkm::usulanStaf($user->role_id - 1)->get();
         return view('mbkm.staff.riwayat', compact('mbkm'));
     }
 

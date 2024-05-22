@@ -91,4 +91,13 @@ class Mbkm extends Model
                 ->orWhere("status", "Usulan konversi nilai");
         });
     }
+
+    public static function usulanStaf($prodiId)
+    {
+        return self::where("status", "Konversi diterima")->where("prodi_id", $prodiId);
+    }
+    public static function riwayatStaf($prodiId)
+    {
+        return self::where("status", "Nilai sudah keluar")->where("prodi_id", $prodiId);
+    }
 }

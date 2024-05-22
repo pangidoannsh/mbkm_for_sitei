@@ -149,6 +149,16 @@
                         @endif
                     </div>
                 </div>
+                @if ($mbkm->status != 'Usulan')
+                    <a href="{{ route('mbkm.logbook', $mbkm->id) }}"
+                        class="btn btn-outline-success rounded-2 w-100 py-2">Logbook</a>
+                @endif
+                @if (in_array($mbkm->status, ['Disetujui', 'Konversi ditolak']) &&
+                        optional(Auth::guard('mahasiswa')->user())->nim == $mbkm->mahasiswa_nim)
+                    <a href="{{ route('mbkm.sertif.create', $mbkm->id) }}" class="btn btn-success mt-1">
+                        Ajukan Konversi
+                    </a>
+                @endif
                 @if ($mbkm->status === 'Mengundurkan diri')
                     <div class="d-flex flex-column gap-1">
                         <div class="label">Surat pengunduran diri</div>
@@ -158,13 +168,19 @@
                         </div>
                     </div>
                 @endif
-                @if ($mbkm->status == 'Usulan' && in_array(optional(Auth::guard('dosen')->user())->role_id, [6, 7, 8]))
-                    <hr>
-                    <form action="{{ route('mbkm.prodi.approveusulan', $mbkm->id) }}" method="POST"
-                        style="display: inline" id="setujui-usulan" class="d-flex">
-                        @csrf
-                        <button class="btn btn-success py-2 rounded-2 w-100">Setujui Usulan MBKM</button>
-                    </form>
+                @if (in_array(optional(Auth::guard('dosen')->user())->role_id, [6, 7, 8]))
+                    @if ($mbkm->status == 'Usulan')
+                        <form action="{{ route('mbkm.prodi.approveusulan', $mbkm->id) }}" method="POST"
+                            style="display: inline" id="setujui-usulan" class="d-flex">
+                            @csrf
+                            <button class="btn btn-success py-2 rounded-2 w-100">Setujui Usulan MBKM</button>
+                        </form>
+                    @elseif($mbkm->status == 'Usulan konversi nilai')
+                        <a href="{{ route('mbkm.prodi.approvekonversi', $mbkm->id) }}" type="submit"
+                            class="btn btn-success py-2 rounded-2">
+                            Setujui Konversi Nilai
+                        </a>
+                    @endif
                 @endif
             </div>
         </div>
@@ -200,9 +216,7 @@
         </div>
 
         {{-- Card Konversi --}}
-        @if (
-            !in_array($mbkm->status, ['Mengundurkan diri', 'Usulan', 'Ditolak', 'Disetujui']) ||
-                (Auth::guard('mahasiswa')->check() && $mbkm->status === 'Disetujui'))
+        @if (!in_array($mbkm->status, ['Mengundurkan diri', 'Usulan', 'Ditolak', 'Disetujui']))
             <div class="col-lg-12 mt-2">
                 <div class="dokumen-card">
                     <div>
@@ -271,9 +285,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    @if (in_array($mbkm->status, ['Disetujui', 'Konversi ditolak']) &&
-                            optional(Auth::guard('mahasiswa')->user())->nim == $mbkm->mahasiswa_nim)
-                        <a href="{{ route('mbkm.sertif.create', $mbkm->id) }}" class="btn btn-outline-success mt-3">
+                    {{-- @if (in_array($mbkm->status, ['Disetujui', 'Konversi ditolak']) && optional(Auth::guard('mahasiswa')->user())->nim == $mbkm->mahasiswa_nim)
+                        <a href="{{ route('mbkm.sertif.create', $mbkm->id) }}" class="btn btn-success mt-3">
                             Tambah Konversi Mata Kuliah
                         </a>
                         <form action="{{ route('mbkm.uploaded', $mbkm->id) }}" method="POST" id="ajukan-konversi">
@@ -286,7 +299,7 @@
                                 @endif
                             </button>
                         </form>
-                    @endif
+                    @endif --}}
 
                 </div>
             </div>

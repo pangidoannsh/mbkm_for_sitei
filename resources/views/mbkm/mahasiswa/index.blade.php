@@ -355,7 +355,7 @@
         </div>
     </div>
     {{-- Modal Tambah Usulan --}}
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="staticBackdrop" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-large">
             <div class="modal-content p-4 rounded-4 d-flex flex-column gap-4">
@@ -451,9 +451,15 @@
                             <input type="date" id="batas" name="batas" class="form-control "
                                 value="{{ old('batas') }}" required>
                         </div>
-                        <button type="submit" class="rounded-3 btn mt-3 btn-success py-3">
-                            Usulkan
-                        </button>
+                        <div class="flex flex-column">
+                            <button type="submit" class="rounded-3 btn mt-3 btn-success py-3 w-100">
+                                Usulkan
+                            </button>
+                            <button type="button" class="rounded-3 btn mt-3 btn-outline-success py-3 w-100"
+                                data-dismiss="modal">
+                                Batalkan
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

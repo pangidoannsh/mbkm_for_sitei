@@ -133,9 +133,9 @@
                                             <form action="{{ route('mbkm.prodi.approvepengunduran', $km->id) }}"
                                                 method="POST" style="display: inline;" class="setujui-pengunduran-diri">
                                                 @csrf
-                                                <button type="submit" class="badge btn btn-success p-1"><i
-                                                        class="fas fa-check"
-                                                        title="Setujui Usulan Pengunduran Diri"></i></button>
+                                                <button type="submit" class="badge btn btn-success p-1"
+                                                    title="Setujui Usulan Pengunduran Diri"><i
+                                                        class="fas fa-check"></i></button>
                                             </form>
                                         @endif
                                     </div>
@@ -254,4 +254,4 @@
             })
         </script>
     @endforeach
-@endpush()
+@endpush

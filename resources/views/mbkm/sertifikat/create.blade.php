@@ -98,7 +98,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-end mt-5">
-            <button type="submit" class="btn btn-success rounded-2 px-5">Kirim</button>
+            <button type="submit" class="btn btn-success rounded-2 px-5">Ajukan Konversi Nilai</button>
         </div>
     </form>
 @endsection
