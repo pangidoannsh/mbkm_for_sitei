@@ -43,7 +43,6 @@ class Mbkm extends Model
             ->where(function ($query) {
                 $query->where("status", "!=", "Ditolak")
                     ->where("status", "!=", "Mengundurkan diri")
-                    ->where("status", "!=", "Konversi diterima")
                     ->where("status", "!=", "Nilai sudah keluar");
             })
             ->orderBy("updated_at", "DESC");
@@ -54,7 +53,6 @@ class Mbkm extends Model
             ->where(function ($query) {
                 $query->where("status", "Ditolak")
                     ->orWhere("status", "Mengundurkan diri")
-                    ->orWhere("status", "Konversi diterima")
                     ->orWhere("status", "Nilai sudah keluar");
             })
             ->orderBy("created_at", "DESC");

@@ -75,7 +75,7 @@ class SertifikatMbkmController extends Controller
                 ]);
             }
         }
-        Mbkm::find($request->mbkm_id)->update(["status" => "Usulan konversi nilai"]);
+        Mbkm::find($request->mbkm_id)->update(["status" => "Usulan konversi nilai", "catatan" => ""]);
         return redirect()->route("mbkm");
     }
 

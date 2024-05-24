@@ -16,9 +16,6 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
             Route::post('/usulan', [MbkmController::class, 'store'])->name('mbkm.store');
             Route::post('/uploaded/{mbkm:id}', [MbkmController::class, 'uploaded'])->name('mbkm.uploaded');
 
-            // Route::get('/usulan', [UsulanController::class, 'index'])->name('mbkm.usulan.index');
-            // Route::get('/usulan/create', [UsulanController::class, 'create'])->name('mbkm.usulan.create');
-
             Route::get('/{mbkm:id}/sertifikat/create', [SertifikatMbkmController::class, 'create'])->name('mbkm.sertif.create');
             Route::post('/sertifikat/create', [SertifikatMbkmController::class, 'store'])->name('mbkm.sertif.store');
             Route::post('/sertifikat/create/konversi', [SertifikatMbkmController::class, 'storekonversi'])->name('mbkm.sertif.storekonversi');

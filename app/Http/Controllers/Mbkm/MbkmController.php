@@ -193,6 +193,7 @@ class MbkmController extends Controller
             return redirect()->back();
         }
         $km->status = 'Usulan konversi nilai';
+        $km->catatan = '';
         $km->update();
         Alert::success('Berhasil!', 'Berhasil mengajukan konversi nilai')->showConfirmButton('Ok', '#28a745');
         return redirect()->back();

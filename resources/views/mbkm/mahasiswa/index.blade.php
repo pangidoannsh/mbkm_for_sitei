@@ -121,17 +121,17 @@
                             @elseif ($currentMbkm->status == 'Konversi ditolak')
                                 <li class="step active">
                                     <div>
-                                        <i class="fas"></i>
+                                        <i class="fas fa-check"></i>
                                     </div>
                                     <p class="mt-3"> USULAN MBKM</p>
                                 </li>
                                 <li class="step active">
-                                    <div><i class="fas "></i>
+                                    <div><i class="fas fa-check"></i>
                                     </div>
                                     <p class="mt-3">UPLOAD SERTIFIKAT DAN NILAI</p>
                                 </li>
-                                <li class="step">
-                                    <div><i class="fas "></i>
+                                <li class="step aktip">
+                                    <div><i class="fas fa-times"></i>
                                     </div>
                                     <p class="mt-3"> KONVERSI NILAI </p>
                                 </li>
@@ -208,7 +208,7 @@
                                 </li>
                             @endif
                         </ul>
-                        <div class="row biru mb-4">
+                        <div class="row row-cols-4 biru mb-4">
                             <div class="col">
                                 <span class="mt-3 "> Tanggal Diterima <br></span>
                                 <span
@@ -219,11 +219,11 @@
                                     class="mt-3 text-danger">{{ Carbon::parse($currentMbkm->selesai_kegiatan)->translatedFormat('l, d F Y') }}<strong
                                         class="text-bold" id="#"></strong><br></strong>
                             </div>
-                            <div class="col"><span class="mt-1 text">Nilai Terkonversi<br></span>
+                            {{-- <div class="col"><span class="mt-1 text">Nilai Terkonversi<br></span>
                                 <strong
                                     class="mt-3 text-danger">{{ Carbon::parse($currentMbkm->tanggal_dikonversi)->translatedFormat('l, d F Y') }}<strong
                                         class="text-bold" id="#"></strong><br></strong>
-                            </div>
+                            </div> --}}
                             <div class="col"></div>
                         </div>
                     </h5>
