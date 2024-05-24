@@ -17,13 +17,13 @@
         <ul class="breadcrumb col-lg-12">
             <li>
                 <a href="#" class="breadcrumb-item active fw-bold text-success px-1">
-                    Usulan
+                    Usulan ({{ $mbkm->count() }})
                 </a>
             </li>
             <span class="px-2">|</span>
             <li>
                 <a href="{{ route('mbkm.staff.riwayat') }}" class="px-1">
-                    Riwayat
+                    Riwayat ({{ $countRiwayat }})
                 </a>
             </li>
         </ul>
@@ -54,7 +54,7 @@
                                     {{ $km->mahasiswa->nama }}
                                 </div>
                             </td>
-                            <td class="text-center">{{ $km->periode_mbkm }}</td>
+                            <td class="text-center">{{ $km->semester }}</td>
                             <td class="text-center">{{ $km->program->name }}</td>
                             <td class="text-center">{{ $km->perusahaan }}</td>
                             <td class="text-center" style="overflow: hidden">

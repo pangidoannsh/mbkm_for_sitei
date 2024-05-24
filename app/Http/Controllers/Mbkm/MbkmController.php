@@ -49,7 +49,8 @@ class MbkmController extends Controller
         if (!in_array($user->role_id, [2, 3, 4])) return abort(403);
 
         $mbkm = Mbkm::usulanStaf($user->role_id - 1)->get();
-        return view('mbkm.staff.index', compact('mbkm'));
+        $countRiwayat = Mbkm::riwayatStaf($user->role_id - 1)->count();
+        return view('mbkm.staff.index', compact('mbkm', 'countRiwayat'));
     }
 
     public function mbkmBerjalan()
@@ -81,8 +82,9 @@ class MbkmController extends Controller
         $user = Auth::guard("web")->user();
         if (!in_array($user->role_id, [2, 3, 4])) return abort(403);
 
-        $mbkm = Mbkm::usulanStaf($user->role_id - 1)->get();
-        return view('mbkm.staff.riwayat', compact('mbkm'));
+        $mbkm = Mbkm::riwayatStaf($user->role_id - 1)->get();
+        $countUsulan = Mbkm::usulanStaf($user->role_id - 1)->count();
+        return view('mbkm.staff.riwayat', compact('mbkm', 'countUsulan'));
     }
 
     public function store(Request $request)
