@@ -231,12 +231,17 @@
             @endif
         @endif
         @if ($mbkm->pluck('status')->contains('Usulan') || $mbkm->count() == 0)
-            <button type="button"
+            {{-- <button type="button"
                 class="btn btn-success w-content mb-3 d-flex align-items-center justify-content-center fw-bold gap-2 rounded-2"
                 data-toggle="modal" data-target="#staticBackdrop">
                 <i class="fa-solid fa-plus"></i>
                 Usulan
-            </button>
+            </button> --}}
+            <a href="{{ route('mbkm.create') }}"
+                class="btn btn-success w-content mb-3 d-flex align-items-center justify-content-center fw-bold gap-2 rounded-2">
+                <i class="fa-solid fa-plus"></i>
+                Usulan
+            </a>
         @endif
 
         <div class="card p-4">
@@ -355,7 +360,7 @@
         </div>
     </div>
     {{-- Modal Tambah Usulan --}}
-    <div class="modal fade" id="staticBackdrop" data-keyboard="false" tabindex="-1"
+    {{-- <div class="modal fade" id="staticBackdrop" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-large">
             <div class="modal-content p-4 rounded-4 d-flex flex-column gap-4">
@@ -464,7 +469,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 @section('footer')
     <section class="bg-dark p-1">

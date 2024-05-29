@@ -149,6 +149,29 @@
                         @endif
                     </div>
                 </div>
+                <div class="d-flex gap-4">
+                    <div class="d-flex flex-column gap-1">
+                        <div class="label">Surat Rekomendasi</div>
+                        <div class="value text-capitalize">
+                            <a href="{{ asset('storage/' . $mbkm->surat_rekomendasi) }}" target="_blank"
+                                class="btn btn-success px-5 rounded-2">Lihat SR</a>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                        <div class="label">Surat Persetujuan PA</div>
+                        <div class="value text-capitalize">
+                            <a href="{{ asset('storage/' . $mbkm->persetujuan_pa) }}" target="_blank"
+                                class="btn btn-success px-5 rounded-2">Lihat Surat</a>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                        <div class="label">KRS Berjalan</div>
+                        <div class="value text-capitalize">
+                            <a href="{{ asset('storage/' . $mbkm->krs_berjalan) }}" target="_blank"
+                                class="btn btn-success px-5 rounded-2">Lihat KRS</a>
+                        </div>
+                    </div>
+                </div>
                 @if ($mbkm->status != 'Usulan')
                     <a href="{{ route('mbkm.logbook', $mbkm->id) }}"
                         class="btn btn-outline-success rounded-2 w-100 py-2">Logbook</a>
@@ -212,6 +235,10 @@
                     <div class="label">Konsentrasi</div>
                     <div class="value">{{ $mbkm->mahasiswa->konsentrasi->nama_konsentrasi }}</div>
                 </div>
+                <div class="d-flex flex-column gap-1">
+                    <div class="label">Dosen PA</div>
+                    <div class="value">{{ $mbkm->pembimbing->nama }}</div>
+                </div>
             </div>
         </div>
 
@@ -224,13 +251,14 @@
                         <div class="divider-green"></div>
                     </div>
 
-                    <div class="d-flex flex-column gap-1">
-                        <div class="label">Sertifikat</div>
-                        <div class="value text-capitalize">
-                            @if ($sertifikat)
-                                <a href="{{ asset('storage/' . $sertifikat->file) }}" target="_blank"
-                                    class="btn btn-success px-5 rounded-2">Buka</a>
-                            @else
+                    <div class="d-flex gap-4">
+                        @if ($sertifikat)
+                            <div class="d-flex flex-column gap-1">
+                                <div class="label">Sertifikat</div>
+                                <div class="value text-capitalize">
+                                    <a href="{{ asset('storage/' . $sertifikat->file) }}" target="_blank"
+                                        class="btn btn-success px-5 rounded-2">Buka</a>
+                                    {{-- @else
                                 <div class="d-flex align-items-center" style="gap:8px">
                                     <span class="text-secondary" style="font-size: 14px">(Belum upload
                                         sertifikat)</span>
@@ -240,67 +268,135 @@
                                             <i class="fa-solid fa-upload"></i>
                                         </a>
                                     @endif
+                                </div> --}}
                                 </div>
-                            @endif
+                            </div>
+                        @endif
+                        @if ($mbkm->transkrip)
+                            <div class="d-flex flex-column gap-1">
+                                <div class="label">Transkrip Nilai MBKM</div>
+                                <div class="value text-capitalize">
+                                    <a href="{{ asset('storage/' . $mbkm->transkrip) }}" target="_blank"
+                                        class="btn btn-success px-5 rounded-2">Buka</a>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    {{-- @if ($mbkm->status === 'Konversi diterima')
+                        <table class="table table-responsive-lg table-bordered table-striped" width="100%">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center" scope="col">NO</th>
+                                    <th class="text-center" scope="col">Nama Mata Kuliah</th>
+                                    <th class="text-center" scope="col">Subjek Penilaian MBKM</th>
+                                    <th class="text-center" scope="col">Nilai Konversi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($konversi as $kr)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
+                                        <td class="text-center">{{ $kr->subjek_mbkm }}</td>
+                                        <td class="text-center">
+                                            @if ($mbkm->status === 'Konversi diterima')
+                                                {{ $kr->nilai_sks }}
+                                            @else
+                                                {{ $kr->nilai_mbkm }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="row row-cols-2">
+                            <div>
+                                <label>Mata Kuliah Berjalan</label>
+                                <table class="table table-responsive-lg table-bordered table-striped" width="100%">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-center" scope="col">NO</th>
+                                            <th class="text-center" scope="col">Mata Kuliah Yang Di Konversi (UNRI)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="body-table-matkul">
+                                        @foreach ($konversi as $kr)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <label>Penilaian MBKM</label>
+                                <table class="table table-responsive-lg table-bordered table-striped" width="100%">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-center" scope="col">NO</th>
+                                            <th class="text-center" scope="col">Subjek/Mata Kuliah MBKM</th>
+                                            <th class="text-center" scope="col">Nilai MBKM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="body-table-nilai-mbkm">
+                                        @foreach ($penilaianMbkm as $penilaian)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">{{ $penilaian->nama_penilaian }}</td>
+                                                <td class="text-center">{{ $penilaian->nilai }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @endif --}}
+                    <div class="row row-cols-2">
+                        <div>
+                            <label>Mata Kuliah Berjalan</label>
+                            <table class="table table-responsive-lg table-bordered table-striped" width="100%">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="text-center" scope="col">NO</th>
+                                        <th class="text-center" scope="col">Mata Kuliah Yang Di Konversi (UNRI)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="body-table-matkul">
+                                    @foreach ($konversi as $kr)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <label>Penilaian MBKM</label>
+                            <table class="table table-responsive-lg table-bordered table-striped" width="100%">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="text-center" scope="col">NO</th>
+                                        <th class="text-center" scope="col">Subjek/Mata Kuliah MBKM</th>
+                                        <th class="text-center" scope="col">Nilai MBKM</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="body-table-nilai-mbkm">
+                                    @foreach ($penilaianMbkm as $penilaian)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $penilaian->nama_penilaian }}</td>
+                                            <td class="text-center">{{ $penilaian->nilai }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <table class="table table-responsive-lg table-bordered table-striped" width="100%">
-                        <thead class="table-dark">
-                            <tr>
-                                <th class="text-center" scope="col">NO</th>
-                                <th class="text-center" scope="col">Nama Mata Kuliah</th>
-                                <th class="text-center" scope="col">Nama Nilai MBKM</th>
-                                <th class="text-center" scope="col">Nilai Konversi</th>
-                                @if (in_array($mbkm->status, ['Usulan disetujui', 'Konversi ditolak']) && Auth::guard('mahasiswa')->check())
-                                    <th class="text-center" scope="col">Aksi</th>
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($konversi as $kr)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
-                                    <td class="text-center">{{ $kr->nama_nilai_mbkm }}</td>
-                                    <td class="text-center">
-                                        @if ($mbkm->status === 'Konversi diterima')
-                                            {{ $kr->nilai_sks }}
-                                        @else
-                                            {{ $kr->nilai_mbkm }}
-                                        @endif
-                                    </td>
-                                    @if (in_array($mbkm->status, ['Usulan disetujui', 'Konversi ditolak']) && Auth::guard('mahasiswa')->check())
-                                        <td class="text-center">
-                                            <form onsubmit="return confirm(' Hapus package? ');"
-                                                action="{{ route('mbkm.sertif.destroykonversi', [$kr->id]) }}"
-                                                method="POST" style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="badge btn btn-danger p-1.5 mb-2"><i
-                                                        class="fas fa-times"></i></button>
-                                            </form>
-                                        </td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    {{-- @if (in_array($mbkm->status, ['Disetujui', 'Konversi ditolak']) && optional(Auth::guard('mahasiswa')->user())->nim == $mbkm->mahasiswa_nim)
-                        <a href="{{ route('mbkm.sertif.create', $mbkm->id) }}" class="btn btn-success mt-3">
-                            Tambah Konversi Mata Kuliah
-                        </a>
-                        <form action="{{ route('mbkm.uploaded', $mbkm->id) }}" method="POST" id="ajukan-konversi">
-                            @csrf
-                            <button type="submit" class="btn btn-success w-100 mt-5 py-2">
-                                @if ($mbkm->status === 'Disetujui')
-                                    Ajukan Konversi
-                                @else
-                                    Ajukan Ulang Konversi
-                                @endif
-                            </button>
-                        </form>
-                    @endif --}}
-
                 </div>
             </div>
         @endif

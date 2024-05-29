@@ -2,6 +2,7 @@
 
 namespace App\Models\Mbkm;
 
+use App\Models\Dosen;
 use App\Models\Mahasiswa;
 use App\Models\Prodi;
 use App\Models\Konsentrasi;
@@ -36,7 +37,10 @@ class Mbkm extends Model
     {
         return $this->belongsTo(Mahasiswa::class, 'mahasiswa_nim', 'nim');
     }
-
+    public function pembimbing()
+    {
+        return $this->belongsTo(Dosen::class, 'dosen_pa', 'nip');
+    }
     public static function usulanMahasiswa($nim)
     {
         return self::where('mahasiswa_nim', $nim)

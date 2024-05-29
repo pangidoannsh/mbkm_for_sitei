@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Mbkm;
 use App\Http\Controllers\Controller;
 use App\Models\Mbkm\Konversi;
 use App\Models\Mbkm\Mbkm;
+use App\Models\Mbkm\PenilaianMbkm;
+use App\Models\Mbkm\SertifikatMbkm;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -44,13 +46,22 @@ class ApprovalController extends Controller
     public function konversi($id)
     {
         $mbkm = Mbkm::findOrFail($id);
+        $sertifikat = SertifikatMbkm::where("mbkm_id", $id)->first();
         $konversi = Konversi::where("mbkm_id", $id)->get();
-        return view("mbkm.prodi.konversi", compact("mbkm", "konversi"));
+        $penilaianMbkm = PenilaianMbkm::where("mbkm_id", $id)->get();
+        return view("mbkm.prodi.konversi", compact("mbkm", "konversi", 'penilaianMbkm', 'sertifikat'));
     }
     public function approveKonversi(Request $request, $id)
     {
-        foreach ($request->nilai_disetujui as $key => $value) {
-            Konversi::where("id", $key)->update(["nilai_sks" => $value]);
+        // dd($request->all());
+        $konversi = $request->konversi;
+        if (is_array($konversi)) {
+            foreach ($konversi as $value) {
+                Konversi::where("id", $value["matkul"])->update([
+                    "subjek_mbkm" => $value["penilaian_mbkm"],
+                    "nilai_sks" => $value["nilai"],
+                ]);
+            }
         }
         $km = Mbkm::findOrFail($id);
         $km->status = 'Konversi diterima';

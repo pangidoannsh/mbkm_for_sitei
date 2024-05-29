@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('mbkm_konversi', function (Blueprint $table) {
             $table->id();
             $table->string("mbkm_id");
-            $table->string("nama_nilai_mbkm");
             $table->string("nama_nilai_matkul");
+            $table->string("subjek_mbkm")->nullable();
             $table->string("kode_matkul");
             $table->string("sks");
             $table->enum("jenis_matkul", ["W", "P"]);
             $table->string("bobot")->nullable();
             $table->string("nilai_sks")->nullable();
-            $table->string("nilai_mbkm");
             $table->timestamps();
         });
     }

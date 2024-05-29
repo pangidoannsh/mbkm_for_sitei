@@ -87,6 +87,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="fw-semibold">
+                <span class="text-danger fw-semibold">*</span>
+                Harap lengkapi logbook Anda untuk dapat mengajukan usulan konversi nilai MBKM
+            </div>
         </div>
     </div>
 @endsection

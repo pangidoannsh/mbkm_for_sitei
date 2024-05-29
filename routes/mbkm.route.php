@@ -12,6 +12,7 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
 
         Route::group(['middleware' => ['auth:mahasiswa']], function () {
             Route::get('/mahasiswa', [MbkmController::class, 'mahasiswaIndex'])->name('mbkm');
+            Route::get('/mahasiswa/create', [MbkmController::class, 'create'])->name('mbkm.create');
             Route::get('/mahasiswa/riwayat', [MbkmController::class, 'mahasiswaRiwayat'])->name('mbkm.riwayat');
             Route::post('/usulan', [MbkmController::class, 'store'])->name('mbkm.store');
             Route::post('/uploaded/{mbkm:id}', [MbkmController::class, 'uploaded'])->name('mbkm.uploaded');

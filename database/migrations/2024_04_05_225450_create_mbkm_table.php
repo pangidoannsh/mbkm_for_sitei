@@ -27,6 +27,11 @@ return new class extends Migration
             $table->date("mulai_kegiatan");
             $table->date("selesai_kegiatan");
             $table->string("batas");
+            $table->string("surat_rekomendasi");
+            $table->string("krs_berjalan");
+            $table->string("persetujuan_pa");
+            $table->string("dosen_pa");
+            $table->string("transkrip")->nullable();
             $table->date("tanggal_disetujui")->nullable();
             $table->date("tanggal_dikonversi")->nullable();
             $table->string("alasan_undur_diri")->nullable();

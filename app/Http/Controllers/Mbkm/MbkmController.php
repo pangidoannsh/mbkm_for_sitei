@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Mbkm;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dosen;
 use App\Models\Konsentrasi;
 use App\Models\Mbkm\Konversi;
 use App\Models\Mbkm\Logbook;
 use App\Models\Mbkm\Mbkm;
+use App\Models\Mbkm\PenilaianMbkm;
 use App\Models\Mbkm\Program;
 use App\Models\Mbkm\SertifikatMbkm;
 use App\Models\Prodi;
@@ -23,6 +25,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class MbkmController extends Controller
 {
+
+    public function create()
+    {
+        $prodi = Prodi::all();
+        $konsentrasi = Konsentrasi::all();
+        $program = Program::all();
+        $semesters = Semester::getSimpleSemester();
+        $dosens = Dosen::all();
+        return view('mbkm.create', compact('prodi', 'konsentrasi', 'program', 'semesters', 'dosens'));
+    }
     public function mahasiswaIndex()
     {
         $prodi = Prodi::all();
@@ -100,14 +112,21 @@ class MbkmController extends Controller
             'mulai_kegiatan' => 'required',
             'selesai_kegiatan' => 'required',
             'batas' => 'required',
+            'batas' => 'required',
+            'surat_rekomendasi' => 'required|mimes:pdf|max:200',
+            'krs_berjalan' => 'required|mimes:pdf|max:200',
+            'persetujuan_pa' => 'required|mimes:pdf|max:200',
+            'dosen_pa' => 'required',
         ]);
         $mahasiswa = Auth::guard("mahasiswa")->user();
         if ($validator->fails()) {
-            Alert::error('Gagal!', 'Gagal membuat usulan')->showConfirmButton('Ok', '#F27474');
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         $mahasiswa = Auth::guard("mahasiswa")->user();
         $rincian = $request->file('rincian');
+        $suratRekomendasi = $request->file('surat_rekomendasi');
+        $krs = $request->file('krs_berjalan');
+        $persetujuanPA = $request->file('persetujuan_pa');
         if ($rincian) {
             Mbkm::create([
                 'mahasiswa_nim' => $mahasiswa->nim,
@@ -124,6 +143,10 @@ class MbkmController extends Controller
                 'rincian_link' => $request->rincian_link,
                 'rincian' => str_replace('public/', '', $rincian->store('public/mbkm')),
                 'batas' => $request->batas,
+                'surat_rekomendasi' => str_replace('public/', '', $suratRekomendasi->store('public/surat-rekomendasi')),
+                'krs_berjalan' => str_replace('public/', '', $krs->store('public/krs')),
+                'persetujuan_pa' => str_replace('public/', '', $persetujuanPA->store('public/persetujuan-pa')),
+                'dosen_pa' => $request->dosen_pa,
             ]);
         } else {
             Mbkm::create([
@@ -140,6 +163,10 @@ class MbkmController extends Controller
                 'selesai_kegiatan' => $request->selesai_kegiatan,
                 'rincian_link' => $request->rincian_link,
                 'batas' => $request->batas,
+                'surat_rekomendasi' => str_replace('public/', '', $suratRekomendasi->store('public/surat-rekomendasi')),
+                'krs_berjalan' => str_replace('public/', '', $krs->store('public/krs')),
+                'persetujuan_pa' => str_replace('public/', '', $persetujuanPA->store('public/persetujuan-pa')),
+                'dosen_pa' => $request->dosen_pa,
             ]);
         }
         Alert::success('Berhasil!', 'Berhasil membuat usulan baru')->showConfirmButton('Ok', '#28a745');
@@ -148,11 +175,12 @@ class MbkmController extends Controller
 
     public function detail($id)
     {
-        $mbkm = Mbkm::where('id', $id)->first();
+        $mbkm = Mbkm::findOrFail($id);
         $konversi = Konversi::where("mbkm_id", $mbkm->id)->get();
         $sertifikat = SertifikatMbkm::where("mbkm_id", $mbkm->id)->first();
         $logbook = Logbook::where("mbkm_id", $id)->get();
-        return view('mbkm.detail', compact('mbkm', 'konversi', 'sertifikat'));
+        $penilaianMbkm = PenilaianMbkm::where("mbkm_id", $id)->get();
+        return view('mbkm.detail', compact('mbkm', 'konversi', 'sertifikat', 'penilaianMbkm'));
     }
 
     public function destroy($id)

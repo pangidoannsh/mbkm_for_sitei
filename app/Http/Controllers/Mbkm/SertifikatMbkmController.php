@@ -7,6 +7,7 @@ use App\Models\Mbkm\Konversi;
 use App\Models\Mbkm\Logbook;
 use App\Models\Mbkm\MataKuliah;
 use App\Models\Mbkm\Mbkm;
+use App\Models\Mbkm\PenilaianMbkm;
 use App\Models\Mbkm\SertifikatMbkm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,14 +37,16 @@ class SertifikatMbkmController extends Controller
         $mahasiswa = Auth::guard("mahasiswa")->user();
         $konversi = Konversi::where("mbkm_id", $id)->get();
         $sertifikat = SertifikatMbkm::where("mbkm_id", $id)->first();
-        $mbkmId = $id;
-        return view('mbkm.sertifikat.create', compact('konversi', 'mbkmId', 'sertifikat', 'matkul'));
+        $penilaianMbkm = PenilaianMbkm::where("mbkm_id", $id)->get();
+        return view('mbkm.sertifikat.create', compact('konversi', 'mbkm', 'sertifikat', 'matkul', 'penilaianMbkm'));
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $mahasiswa = Auth::guard("mahasiswa")->user();
 
+        // Store Sertifikat
         if ($request->hasFile('file')) {
             $files =  time() . '.' . $request->file->extension();
             Storage::putFileAs('public/sertifikat', $request->file('file'), $files);
@@ -60,22 +63,50 @@ class SertifikatMbkmController extends Controller
                 ]);
             }
         }
+        // Store Matkul yang akan dikonversi
         $konversi = $request->konversi;
         if (is_array($konversi)) {
-            foreach ($konversi as $value) {
-                $matkul = MataKuliah::findOrFail($value["matkul"]);
+            foreach ($konversi as $mk_id) {
+                $matkul = MataKuliah::findOrFail($mk_id);
                 Konversi::create([
                     'mbkm_id' => $request->mbkm_id,
-                    'nama_nilai_mbkm' => $value["nama_nilai_mbkm"],
                     'nama_nilai_matkul' => $matkul->mk,
                     'kode_matkul' => $matkul->kode_mk,
                     'sks' => $matkul->sks,
                     'jenis_matkul' => $matkul->jenis,
-                    'nilai_mbkm' => $value["nilai_mbkm"],
                 ]);
             }
         }
-        Mbkm::find($request->mbkm_id)->update(["status" => "Usulan konversi nilai", "catatan" => ""]);
+        // Store Penilaian MBKM
+        $penilaianMbkm = $request->penilaian_mbkm;
+        if (is_array($penilaianMbkm)) {
+            foreach ($penilaianMbkm as $value) {
+                PenilaianMbkm::create([
+                    'mbkm_id' => $request->mbkm_id,
+                    'nama_penilaian' => $value["nama_nilai_mbkm"],
+                    'nilai' => $value["nilai_mbkm"],
+                ]);
+            }
+        }
+        // MBKM
+        $mbkm = Mbkm::find($request->mbkm_id);
+        $mbkm->status = "Usulan konversi nilai";
+        $mbkm->catatan = "";
+        // Jika Upload Transkrip
+        if ($request->hasFile('transkrip')) {
+            $files =  time() . '.' . $request->file->extension();
+            Storage::putFileAs('public/transkrip_mbkm', $request->file('transkrip'), $files);
+            $currentTranskrip = $mbkm->transkrip;
+            if ($currentTranskrip) {
+                Storage::delete("public/" . $currentTranskrip->file);
+                $currentTranskrip->file = "sertifikat/" . $files;
+                $currentTranskrip->update();
+            } else {
+                $mbkm->transkrip = "transkrip_mbkm/" . $files;
+            }
+        }
+        // flush Upadte
+        $mbkm->update();
         return redirect()->route("mbkm");
     }
 
