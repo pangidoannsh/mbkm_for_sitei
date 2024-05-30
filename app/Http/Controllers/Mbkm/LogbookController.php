@@ -13,6 +13,7 @@ class LogbookController extends Controller
     public function index($mbkmId)
     {
         $mbkm = Mbkm::findOrFail($mbkmId);
+        $logbooks = Logbook::where("mbkm_id", $mbkmId)->orderBy("input_date")->get();
         return view("mbkm.logbook", compact("logbooks", "mbkm"));
     }
 
@@ -24,30 +25,5 @@ class LogbookController extends Controller
         $logbook->update();
 
         return redirect()->back();
-    }
-
-    static function generateMonthArray($startDate, $endDate)
-    {
-        // Ubah string tanggal menjadi objek Carbon
-        $startDate = Carbon::createFromFormat('Y-m-d', $startDate);
-        $endDate = Carbon::createFromFormat('Y-m-d', $endDate);
-
-        // Inisialisasi array untuk menyimpan bulan-bulan
-        $monthArray = [];
-
-        // Tambahkan tanggal mulai kegiatan
-        $currentDate = $startDate;
-        $monthArray[] = $currentDate->toDateString();
-
-        // Tambahkan satu bulan pada setiap iterasi sampai mencapai tanggal selesai
-        while ($currentDate->lessThan($endDate)) {
-            $currentDate->addMonths(1);
-            if ($currentDate->greaterThanOrEqualTo($endDate)) {
-                break;
-            }
-            $monthArray[] = $currentDate->toDateString();
-        }
-
-        return $monthArray;
     }
 }
