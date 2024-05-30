@@ -35,7 +35,33 @@
         // Jika nilai lebih rendah dari rentang terendah
         return 'Invalid grade';
     }
-    // dd(konversiNilaiKeHuruf(91));
+    function nipFormat($inputString)
+    {
+        $length1 = 8;
+        $length2 = 6;
+        $length3 = 1;
+        $length4 = 3;
+
+        if (strlen($inputString) >= $length1 + $length2 + $length3 + $length4) {
+            $part1 = substr($inputString, 0, $length1);
+            $part2 = substr($inputString, $length1, $length2);
+            $part3 = substr($inputString, $length1 + $length2, $length3);
+            $part4 = substr($inputString, $length1 + $length2 + $length3, $length4);
+
+            $outputString = $part1 . ' ' . $part2 . ' ' . $part3 . ' ' . $part4;
+            return $outputString;
+        } else {
+            return $inputString;
+        }
+    }
+    function semesterFormat($string)
+    {
+        $parts = explode(' ', $string);
+        $semester = $parts[0];
+        $tahun_akademik = str_replace('/', '-', $parts[1]);
+        $output = [$semester, $tahun_akademik];
+        return $output;
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -146,7 +172,11 @@
             <strong>
                 <p style="text-align: center;margin-bottom:-10px;">HASIL STUDI NILAI KONVERSI</p>
             </strong>
-            <p style="text-align: center;">Semester Genap TA. 2022-2023</p>
+            @php
+                $semester = semesterFormat($mbkm->semester);
+            @endphp
+            <p style="text-align: center;text-transform: capitalize">Semester {{ $semester[0] }} TA.
+                {{ $semester[1] }}</p>
         </div>
         <br>
         <div style="padding-left: 50px;font-size: 15px;">
@@ -174,7 +204,7 @@
                 <tr>
                     <td>Dosen Pembimbing Lapangan</td>
                     <td>:</td>
-                    <td>Dr. Feri candra, ST.,MT</td>
+                    <td>{{ $mbkm->pembimbing->nama }}</td>
                 </tr>
                 <tr>
                     <td>Lokasi</td>
@@ -254,7 +284,7 @@
                 <div class="col">
                     <p>Mengetahui <br> Koordinator Program Studi <br> Teknik Informatika</p>
                     <br><br><br>
-                    <p>Dr. Feri Candra, ST.,MT <br>NIP. 19740428 200212 1 003</p>
+                    <p>{{ $kaprodi->nama }}<br>NIP. {{ nipFormat($kaprodi->nip) }}</p>
                 </div>
                 <div class="col">
                     @if ($qrcode)
@@ -268,7 +298,7 @@
                         Pembimbing Lapangan/<br> TIM MBKM Prodi Teknik Informatika
                     </p>
                     <br><br><br>
-                    <p>Dr. Feri Candra, ST.,MT<br>NIP. 19740428 200212 1 003</p>
+                    <p>{{ $mbkm->pembimbing->nama }}<br>NIP. {{ nipFormat($mbkm->pembimbing->nip) }}</p>
                 </div>
             </div>
             <br>

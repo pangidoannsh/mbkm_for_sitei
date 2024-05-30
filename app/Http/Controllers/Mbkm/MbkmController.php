@@ -231,8 +231,10 @@ class MbkmController extends Controller
     {
         $mbkm = mbkm::findOrFail($id);
         $konversi = Konversi::where("mbkm_id", $id)->get();
+        $prodiMahasiswa = $mbkm->prodi_id;
+        $kaprodi = Dosen::where("role_id", $prodiMahasiswa + 5)->first();
         $qrcode = base64_encode(QrCode::format('svg')->size(80)->errorCorrection('H')->generate(URL::to('/mbkm') . '/' . encrypt($mbkm->id) . "/public"));
-        $pdf = PDF::loadview('mbkm.print', compact('konversi', 'mbkm', 'qrcode'));
+        $pdf = PDF::loadview('mbkm.print', compact('konversi', 'mbkm', 'qrcode', 'kaprodi'));
         $pdf->setPaper('A4', 'potrait');
         return $pdf->stream('konversi.pdf');
     }
