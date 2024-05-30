@@ -60,88 +60,85 @@
                 </thead>
                 <tbody>
                     @foreach ($mbkm as $km)
-                        @if ($km->status == 'Nilai sudah keluar')
-                        @else
-                            <tr>
-                                <td class="text-center">{{ $loop->iteration }}</td>
-                                <td class="text-center">{{ $km->mahasiswa->nim }}</td>
-                                <td class="text-center">{{ $km->mahasiswa->nama }}</td>
-                                <td class="text-center">{{ $km->semester }}</td>
-                                <td class="text-center">{{ $km->program->name }}</td>
-                                <td class="text-center">{{ $km->perusahaan }}</td>
-                                <td class="text-center ">{{ $km->judul }}</td>
-                                @if ($km->status == 'Nilai sudah keluar')
-                                    <td class="text-center bg-success">{{ $km->status }}</td>
-                                @elseif($km->status == 'Ditolak')
-                                    <td class="text-center bg-danger">{{ $km->status }}</td>
-                                @elseif($km->status == 'Konversi Ditolak')
-                                    <td class="text-center bg-danger">{{ $km->status }}</td>
-                                @else
-                                    <td class="text-center bg-warning">{{ $km->status }}</td>
-                                @endif
-                                <td class="text-center">
-                                    {{ Carbon::parse($km->mulai_kegiatan)->translatedFormat('d/m/Y') .
-                                        ' - ' .
-                                        Carbon::parse($km->selesai_kegiatan)->translatedFormat('d/m/Y') }}
-                                </td>
-                                <td class="text-center text-danger text-bold">
-                                    @if ($km->status === 'Usulan')
-                                        @if ($currentDate <= $km->batas)
-                                            {{ $currentDate->diffInDays($km->batas, false) + 1 }} hari lagi
-                                        @else
-                                            Melewati Batas Waktu
-                                        @endif
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $km->mahasiswa->nim }}</td>
+                            <td class="text-center">{{ $km->mahasiswa->nama }}</td>
+                            <td class="text-center">{{ $km->semester }}</td>
+                            <td class="text-center">{{ $km->program->name }}</td>
+                            <td class="text-center">{{ $km->perusahaan }}</td>
+                            <td class="text-center ">{{ $km->judul }}</td>
+                            @if ($km->status == 'Nilai sudah keluar')
+                                <td class="text-center bg-success">{{ $km->status }}</td>
+                            @elseif($km->status == 'Ditolak')
+                                <td class="text-center bg-danger">{{ $km->status }}</td>
+                            @elseif($km->status == 'Konversi Ditolak')
+                                <td class="text-center bg-danger">{{ $km->status }}</td>
+                            @else
+                                <td class="text-center bg-warning">{{ $km->status }}</td>
+                            @endif
+                            <td class="text-center">
+                                {{ Carbon::parse($km->mulai_kegiatan)->translatedFormat('d/m/Y') .
+                                    ' - ' .
+                                    Carbon::parse($km->selesai_kegiatan)->translatedFormat('d/m/Y') }}
+                            </td>
+                            <td class="text-center text-danger text-bold">
+                                @if ($km->status === 'Usulan')
+                                    @if ($currentDate <= $km->batas)
+                                        {{ $currentDate->diffInDays($km->batas, false) + 1 }} hari lagi
                                     @else
-                                        -
+                                        Melewati Batas Waktu
                                     @endif
-                                </td>
-                                <th>
-                                    <div class="row row-cols-2" style="width: 56px;margin: 0 auto">
-                                        <div>
-                                            <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1"
-                                                data-bs-toggle="tooltip" title="Lihat Detail"><i
-                                                    class="fas fa-info-circle"></i></a>
-                                        </div>
-                                        @if ($km->status == 'Usulan')
-                                            <form action="{{ route('mbkm.prodi.approveusulan', $km->id) }}" method="POST"
-                                                style="display: inline;" class="setujui-usulan">
-                                                @csrf
-                                                <button type="submit" class="badge btn btn-success p-1"><i
-                                                        class="fas fa-check" title="Setujui Usulan"></i></button>
-                                            </form>
-                                            <div>
-                                                <button title="Tolak Usulan" data-id="{{ $km->id }}"
-                                                    class="badge btn btn-danger p-1.5 mb-2 show-tolak-usulan"><i
-                                                        class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        @elseif($km->status == 'Usulan konversi nilai')
-                                            <div>
-                                                <a href="{{ route('mbkm.prodi.approvekonversi', $km->id) }}" type="submit"
-                                                    class="badge btn btn-success p-1"><i class="fas fa-check"
-                                                        title="Setujui usulan konversi nilai"></i>
-                                                </a>
-                                            </div>
-                                            {{-- Button Tolak Konversi --}}
-                                            <div>
-                                                <button title="Tolak Konversi" data-id="{{ $km->id }}"
-                                                    class="badge btn btn-danger p-1.5 mb-2 show-tolak-konversi">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        @elseif($km->status == 'Usulan pengunduran diri')
-                                            <form action="{{ route('mbkm.prodi.approvepengunduran', $km->id) }}"
-                                                method="POST" style="display: inline;" class="setujui-pengunduran-diri">
-                                                @csrf
-                                                <button type="submit" class="badge btn btn-success p-1"
-                                                    title="Setujui Usulan Pengunduran Diri"><i
-                                                        class="fas fa-check"></i></button>
-                                            </form>
-                                        @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <th>
+                                <div class="row row-cols-2" style="width: 56px;margin: 0 auto">
+                                    <div>
+                                        <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1"
+                                            data-bs-toggle="tooltip" title="Lihat Detail"><i
+                                                class="fas fa-info-circle"></i></a>
                                     </div>
-                                    </td>
-                            </tr>
-                        @endif
+                                    @if ($km->status == 'Usulan')
+                                        <form action="{{ route('mbkm.prodi.approveusulan', $km->id) }}" method="POST"
+                                            style="display: inline;" class="setujui-usulan">
+                                            @csrf
+                                            <button type="submit" class="badge btn btn-success p-1"><i class="fas fa-check"
+                                                    title="Setujui Usulan"></i></button>
+                                        </form>
+                                        <div>
+                                            <button title="Tolak Usulan" data-id="{{ $km->id }}"
+                                                class="badge btn btn-danger p-1.5 mb-2 show-tolak-usulan"><i
+                                                    class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    @elseif($km->status == 'Usulan konversi nilai')
+                                        <div>
+                                            <a href="{{ route('mbkm.prodi.approvekonversi', $km->id) }}" type="submit"
+                                                class="badge btn btn-success p-1"><i class="fas fa-check"
+                                                    title="Setujui usulan konversi nilai"></i>
+                                            </a>
+                                        </div>
+                                        {{-- Button Tolak Konversi --}}
+                                        <div>
+                                            <button title="Tolak Konversi" data-id="{{ $km->id }}"
+                                                class="badge btn btn-danger p-1.5 mb-2 show-tolak-konversi">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    @elseif($km->status == 'Usulan pengunduran diri')
+                                        <form action="{{ route('mbkm.prodi.approvepengunduran', $km->id) }}" method="POST"
+                                            style="display: inline;" class="setujui-pengunduran-diri">
+                                            @csrf
+                                            <button type="submit" class="badge btn btn-success p-1"
+                                                title="Setujui Usulan Pengunduran Diri"><i
+                                                    class="fas fa-check"></i></button>
+                                        </form>
+                                    @endif
+                                </div>
+                                </td>
+                        </tr>
                     @endforeach
                 </tbody>
 

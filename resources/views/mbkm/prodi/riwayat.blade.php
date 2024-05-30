@@ -61,7 +61,7 @@
                 </thead>
                 <tbody>
                     @foreach ($mbkm as $km)
-                        @if ($km->status === 'Konversi diterima')
+                        @if (in_array($km->status, ['Konversi diterima', 'Nilai sudah keluar']))
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td class="text-center">{{ $km->mahasiswa->nim }}</td>
@@ -70,14 +70,7 @@
                                 <td class="text-center">{{ $km->program->name }}</td>
                                 <td class="text-center">{{ $km->perusahaan }}</td>
                                 <td class="text-center ">{{ $km->judul }}</td>
-                                @if ($km->status == 'Konversi diterima')
-                                    <td class="text-center bg-success">Telah Terkonversi</td>
-                                @elseif($km->status == 'Ditolak' || $km->status == 'Mengundurkan diri')
-                                    <td class="text-center bg-danger">{{ $km->status }}</td>
-                                @else
-                                    <td class="text-center bg-warning">{{ $km->status }}</td>
-                                @endif
-
+                                <td class="text-center bg-success">Telah Terkonversi</td>
                                 <td class="text-center" style="overflow: hidden">
                                     <div class="ellipsis-2">
                                         {{ Carbon::parse($km->mulai_kegiatan)->translatedFormat('d F Y') }} -

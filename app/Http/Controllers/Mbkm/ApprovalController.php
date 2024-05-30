@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mbkm;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mbkm\Konversi;
+use App\Models\Mbkm\Logbook;
 use App\Models\Mbkm\Mbkm;
 use App\Models\Mbkm\PenilaianMbkm;
 use App\Models\Mbkm\SertifikatMbkm;
@@ -26,6 +27,17 @@ class ApprovalController extends Controller
                 "status" => "Ditolak",
                 "catatan" => "Salah satu usulan telah DITERIMA"
             ]);
+        $logbooks = Logbook::where("mbkm_id", $id)->orderBy("input_date")->get();
+        if ($logbooks->count() == 0) {
+            foreach (Logbook::generateMonthArray($km->mulai_kegiatan, $km->selesai_kegiatan) as $date) {
+                Logbook::create([
+                    "mbkm_id" => $id,
+                    "input_date" => $date
+                ]);
+            }
+            $logbooks = Logbook::where("mbkm_id", $id)->orderBy("input_date")->get();
+        }
+
         Alert::success('Berhasil!', 'Berhasil menyetujui usulan MBKM')->showConfirmButton('Ok', '#28a745');
         return redirect()->back();
     }

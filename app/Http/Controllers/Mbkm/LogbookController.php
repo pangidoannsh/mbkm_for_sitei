@@ -13,16 +13,6 @@ class LogbookController extends Controller
     public function index($mbkmId)
     {
         $mbkm = Mbkm::findOrFail($mbkmId);
-        $logbooks = Logbook::where("mbkm_id", $mbkmId)->orderBy("input_date")->get();
-        if ($logbooks->count() == 0) {
-            foreach (self::generateMonthArray($mbkm->mulai_kegiatan, $mbkm->selesai_kegiatan) as $date) {
-                Logbook::create([
-                    "mbkm_id" => $mbkmId,
-                    "input_date" => $date
-                ]);
-            }
-            $logbooks = Logbook::where("mbkm_id", $mbkmId)->orderBy("input_date")->get();
-        }
         return view("mbkm.logbook", compact("logbooks", "mbkm"));
     }
 
