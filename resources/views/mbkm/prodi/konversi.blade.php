@@ -71,12 +71,13 @@
                 id="setujui-konversi">
                 @csrf
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-5">
                         <table class="table table-responsive-lg table-bordered table-striped" width="100%">
                             <thead class="table-dark">
                                 <tr>
                                     <th class="text-center" scope="col">NO</th>
                                     <th class="text-center" scope="col">Mata Kuliah Yang Di Konversi (UNRI)</th>
+                                    <th class="text-center" scope="col">Bobot</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,12 +85,13 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $kr->nama_nilai_matkul }}</td>
+                                        <td class="text-center">{{ $kr->sks }} SKS</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-8">
+                    <div class="col-7">
                         <table class="table table-responsive-lg table-bordered table-striped" width="100%">
                             <thead class="table-dark">
                                 <tr>

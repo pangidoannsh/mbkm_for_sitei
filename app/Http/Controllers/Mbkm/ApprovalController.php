@@ -58,6 +58,9 @@ class ApprovalController extends Controller
     public function konversi($id)
     {
         $mbkm = Mbkm::findOrFail($id);
+        if ($mbkm->status !== "Usulan konversi nilai") {
+            return abort(404);
+        }
         $sertifikat = SertifikatMbkm::where("mbkm_id", $id)->first();
         $konversi = Konversi::where("mbkm_id", $id)->get();
         $penilaianMbkm = PenilaianMbkm::where("mbkm_id", $id)->get();
