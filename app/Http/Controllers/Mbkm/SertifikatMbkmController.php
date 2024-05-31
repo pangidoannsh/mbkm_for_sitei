@@ -33,8 +33,8 @@ class SertifikatMbkmController extends Controller
         }
 
 
-        $matkul = MataKuliah::all();
         $mahasiswa = Auth::guard("mahasiswa")->user();
+        $matkul = MataKuliah::where("prodi_id", $mahasiswa->prodi_id)->get();
         $konversi = Konversi::where("mbkm_id", $id)->get();
         $sertifikat = SertifikatMbkm::where("mbkm_id", $id)->first();
         $penilaianMbkm = PenilaianMbkm::where("mbkm_id", $id)->get();

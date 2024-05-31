@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\Mbkm\ApprovalController;
 use App\Http\Controllers\Mbkm\LogbookController;
 use App\Http\Controllers\Mbkm\MbkmController;
@@ -58,5 +59,12 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
         Route::get('/program-mbkm', [ProgramMbkmController::class, 'index'])->name('program-mbkm');
         Route::post('/program-mbkm', [ProgramMbkmController::class, 'store'])->name('program-mbkm.store');
         Route::delete('/program-mbkm/{id}', [ProgramMbkmController::class, 'delete'])->name('program-mbkm.delete');
+
+        Route::get('/matkul', [MataKuliahController::class, 'index'])->name('matkul');
+        Route::get('/matkul/create', [MataKuliahController::class, 'create'])->name('matkul.create');
+        Route::post('/matkul', [MataKuliahController::class, 'store'])->name('matkul.store');
+        Route::get('/matkul/{id}/edit', [MataKuliahController::class, 'edit'])->name('matkul.edit');
+        Route::put('/matkul/{id}', [MataKuliahController::class, 'update'])->name('matkul.update');
+        Route::delete('/matkul/{id}', [MataKuliahController::class, 'destroy'])->name('matkul.delete');
     });
 });

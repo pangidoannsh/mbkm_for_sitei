@@ -754,6 +754,9 @@
                                                     <li class="nav-item"><a href="/program-mbkm"
                                                             class="dropdown-item nav-link {{ Request::is('mahasiswa*') ? 'text-success' : '' }}">Program
                                                             MBKM</a>
+                                                    <li class="nav-item"><a href="/matkul"
+                                                            class="dropdown-item nav-link {{ Request::is('matkul*') ? 'text-success' : '' }}">Mata
+                                                            Kuliah</a>
                                                     </li>
                                                     <li class="nav-item"><a href="#"
                                                             class="dropdown-item cursor-default nav-link"><b>Backup

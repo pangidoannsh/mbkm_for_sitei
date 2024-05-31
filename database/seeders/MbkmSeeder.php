@@ -23,16 +23,19 @@ class MbkmSeeder extends Seeder
             "kode_mk" => "TI123",
             "mk" => "Rekayasa Web",
             "sks" => 4,
+            "prodi_id" => 3
         ]);
         MataKuliah::create([
             "kode_mk" => "TI234",
             "mk" => "Etika Profesi",
             "sks" => 2,
+            "prodi_id" => 3
         ]);
         MataKuliah::create([
             "kode_mk" => "TI345",
             "mk" => "Pengujian Sistem Informasi",
             "sks" => 3,
+            "prodi_id" => 3
         ]);
     }
 }
