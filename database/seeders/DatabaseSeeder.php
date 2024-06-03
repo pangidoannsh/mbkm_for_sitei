@@ -324,7 +324,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Dosen::create([
-            'role_id' => 6,
             'prodi_id' => 1,
             'nip' => 197507052002121003,
             'password' => bcrypt('1'),
@@ -333,7 +332,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'amirhamzah.lecturer@unri.ac.id',
         ]);
         Dosen::create([
-            'role_id' => 7,
             'prodi_id' => 2,
             'nip' => 197511042005012001,
             'password' => bcrypt('1'),
@@ -495,6 +493,7 @@ class DatabaseSeeder extends Seeder
         ]);
         Dosen::create([
             'prodi_id' => 2,
+            'role_id' => 7,
             'nip' => 197803082003121001,
             'password' => bcrypt('1'),
             'nama' => 'Dian Yayan Sukma, S.T., M.T.',
@@ -526,6 +525,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'rizkaqoriyulianiputri@lecturer.unri.ac.id',
         ]);
         Dosen::create([
+            'role_id' => 6,
             'prodi_id' => 1,
             'nip' => 198002052003121001,
             'password' => bcrypt('1'),
