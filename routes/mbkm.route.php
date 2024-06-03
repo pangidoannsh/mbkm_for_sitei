@@ -4,6 +4,7 @@ use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\Mbkm\ApprovalController;
 use App\Http\Controllers\Mbkm\LogbookController;
 use App\Http\Controllers\Mbkm\MbkmController;
+use App\Http\Controllers\Mbkm\PenilaianMbkmController;
 use App\Http\Controllers\Mbkm\SertifikatMbkmController;
 use App\Http\Controllers\ProgramMbkmController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,8 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
 
             Route::get('/undur-diri/{mbkm:id}', [MbkmController::class, 'undurDiri'])->name('mbkm.undurdiri');
             Route::post('/undur-diri/{mbkm:id}', [MbkmController::class, 'storeUndurDiri'])->name('mbkm.undurdiri.store');
+
+            Route::get('penilaian-mbkm/{id}/delete', [PenilaianMbkmController::class, 'delete'])->name("penilaian.delete");
         });
 
         Route::group(['middleware' => ['auth:dosen']], function () {
@@ -42,7 +45,6 @@ Route::group(['middleware' => ['auth:dosen,web,mahasiswa']], function () {
         });
 
         Route::group(['middleware' => ['auth:web']], function () {
-
             // staff
             Route::get('/staff', [MbkmController::class, 'staffIndex'])->name('mbkm.staff');
             Route::get('/staff/riwayat', [MbkmController::class, 'staffRiwayat'])->name('mbkm.staff.riwayat');

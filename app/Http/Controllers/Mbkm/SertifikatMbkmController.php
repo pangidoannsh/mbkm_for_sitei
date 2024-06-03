@@ -48,18 +48,20 @@ class SertifikatMbkmController extends Controller
 
         // Store Sertifikat
         if ($request->hasFile('file')) {
-            $files =  time() . '.' . $request->file->extension();
-            Storage::putFileAs('public/sertifikat', $request->file('file'), $files);
+            $file = $request->file('file');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            Storage::putFileAs('public/transkrip_mbkm', $file, $fileName);
+
             $currentSertifikat = SertifikatMbkm::where("mbkm_id", $request->mbkm_id)->first();
             if ($currentSertifikat) {
                 Storage::delete("public/" . $currentSertifikat->file);
-                $currentSertifikat->file = "sertifikat/" . $files;
+                $currentSertifikat->file = "sertifikat/" . $fileName;
                 $currentSertifikat->update();
             } else {
                 SertifikatMbkm::create([
                     'mahasiswa_nim' => $mahasiswa->nim,
                     'mbkm_id' => $request->mbkm_id,
-                    'file' => "sertifikat/" . $files
+                    'file' => "sertifikat/" . $fileName
                 ]);
             }
         }
@@ -94,15 +96,14 @@ class SertifikatMbkmController extends Controller
         $mbkm->catatan = "";
         // Jika Upload Transkrip
         if ($request->hasFile('transkrip')) {
-            $files =  time() . '.' . $request->file->extension();
-            Storage::putFileAs('public/transkrip_mbkm', $request->file('transkrip'), $files);
-            $currentTranskrip = $mbkm->transkrip;
-            if ($currentTranskrip) {
-                Storage::delete("public/" . $currentTranskrip->file);
-                $currentTranskrip->file = "sertifikat/" . $files;
-                $currentTranskrip->update();
+            $file = $request->file('transkrip');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            Storage::putFileAs('public/transkrip_mbkm', $file, $fileName);
+            if ($mbkm->transkrip) {
+                Storage::delete("public/" . $mbkm->transkrip);
+                $mbkm->transkrip = "transkrip_mbkm/" . $fileName;
             } else {
-                $mbkm->transkrip = "transkrip_mbkm/" . $files;
+                $mbkm->transkrip = "transkrip_mbkm/" . $fileName;
             }
         }
         // flush Upadte

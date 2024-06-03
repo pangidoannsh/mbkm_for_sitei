@@ -65,16 +65,16 @@
                             <a target="_blank" href="{{ asset('storage/' . $mbkm->transkrip) }}"
                                 class="btn-outline-success btn px-5 rounded-2">Lihat Transkrip Nilai MBKM</a>
                         </div>
-                        <button type="button" class="btn text-warning" title="Ubah Sertifikat" id="edit-sertif">
+                        <button type="button" class="btn text-warning" title="Ubah Sertifikat" id="edit-transkrip">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </div>
-                    <div class="row d-none" id="edit-sertif-card">
+                    <div class="row d-none" id="edit-transkrip-card">
                         <div class="col-6-lg">
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between">
                                     <label for="transkrip" class="form-label">Ubah Transkrip Nilai MBKM</label>
-                                    <span type="button" class="text-secondary pointer" id="cancel-edit">
+                                    <span type="button" class="text-secondary pointer" id="cancel-edit-transkrip">
                                         <i class="fa-solid fa-circle-xmark"></i>
                                     </span>
                                 </div>
@@ -146,14 +146,14 @@
                             @foreach ($penilaianMbkm as $penilaian)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td class="text-center">{{ $penilaian->nama_nilai_mbkm }}</td>
-                                    <td class="text-center">{{ $penilaian->nilai_mbkm }}</td>
+                                    <td class="text-center">{{ $penilaian->nama_penilaian }}</td>
+                                    <td class="text-center">{{ $penilaian->nilai }}</td>
                                     <td class="text-center">
-                                        {{-- <div>
-                                            <button type="button" data-id="{{ $mkMbkm->id }}"
-                                                class="badge btn btn-danger p-1.5 mb-2 delete-konversi"><i
-                                                    class="fas fa-times"></i></button>
-                                        </div> --}}
+                                        <div>
+                                            <button type="button" data-id="{{ $penilaian->id }}"
+                                                class="badge btn btn-danger p-1.5 mb-2 delete-penilaian-mbkm">
+                                                <i class="fas fa-times"></i></button>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -252,12 +252,37 @@
                 }
             })
         })
+        $(".delete-penilaian-mbkm").click(e => {
+            const id = $(e.currentTarget).data("id");
+            Swal.fire({
+                title: 'Hapus Penilaian MBKM',
+                text: 'Lanjutkan Penghapusan?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya',
+                confirmButtonColor: '#28a745'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/mbkm/penilaian-mbkm/${id}/delete`
+                }
+            })
+        })
         const editSertifCard = $("#edit-sertif-card")
+        const editTransrkripCard = $("#edit-transkrip-card")
+
         $("#edit-sertif").click(e => {
             editSertifCard.removeClass("d-none")
         })
         $("#cancel-edit").click(e => {
             editSertifCard.addClass("d-none")
+        })
+
+        $("#edit-transkrip").click(e => {
+            editTransrkripCard.removeClass("d-none")
+        })
+        $("#cancel-edit-transkrip").click(e => {
+            editTransrkripCard.addClass("d-none")
         })
     </script>
 @endpush
