@@ -50,7 +50,7 @@ class SertifikatMbkmController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
-            Storage::putFileAs('public/transkrip_mbkm', $file, $fileName);
+            Storage::putFileAs('public/sertifikat', $file, $fileName);
 
             $currentSertifikat = SertifikatMbkm::where("mbkm_id", $request->mbkm_id)->first();
             if ($currentSertifikat) {
