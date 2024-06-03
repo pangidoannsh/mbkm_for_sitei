@@ -692,7 +692,6 @@
 
                             @endif
 
-
                             @if (Str::length(Auth::guard('web')->user()) > 0)
                                 @if (in_array(Auth::guard('web')->user()->role_id, [2, 3]))
                                     <ul class="navbar-nav">
@@ -707,6 +706,13 @@
 
                                                     <li class="nav-item"><a class="nav-link" href="/mahasiswa"
                                                             class="dropdown-item mb-1 {{ Request::is('mahasiswa*') ? 'text-success' : '' }}">Mahasiswa</a>
+                                                    </li>
+                                                    <li class="nav-item"><a href="/program-mbkm"
+                                                            class="dropdown-item nav-link {{ Request::is('mahasiswa*') ? 'text-success' : '' }}">Program
+                                                            MBKM</a>
+                                                    <li class="nav-item"><a href="/matkul"
+                                                            class="dropdown-item nav-link {{ Request::is('matkul*') ? 'text-success' : '' }}">Mata
+                                                            Kuliah</a>
                                                     </li>
                                                 </ul>
                                             </div>
