@@ -64,10 +64,15 @@ class Mbkm extends Model
 
     public static function usulanProdi($prodiId)
     {
+        // return self::where(function ($status) {
+        //     $status->orWhere(function ($query) {
+        //         $query->where("status", "Usulan")->where("batas", ">=", Carbon::today());
+        //     })
+        //         ->orWhere("status", "Usulan konversi nilai")
+        //         ->orWhere("status", "Konversi ditolak")
+        //         ->orWhere("status", "Usulan pengunduran diri");
         return self::where(function ($status) {
-            $status->orWhere(function ($query) {
-                $query->where("status", "Usulan")->where("batas", ">=", Carbon::today());
-            })
+            $status->orWhere("status", "Usulan")
                 ->orWhere("status", "Usulan konversi nilai")
                 ->orWhere("status", "Konversi ditolak")
                 ->orWhere("status", "Usulan pengunduran diri");

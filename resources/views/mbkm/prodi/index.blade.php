@@ -243,12 +243,9 @@
                 tbodyContent += `
                 <tr>
                     <td class="text-center">${index + 1}</td>
-                    <td class="text-center">${riwayat.mahasiswa_nim}</td>
-                    <td class="text-center">${riwayat.mahasiswa.nama}</td>
                     <td class="text-center">${riwayat.semester}</td>
                     <td class="text-center">${riwayat.program.name}</td>
                     <td class="text-center">${riwayat.perusahaan}</td>
-                    <td class="text-center">${riwayat.judul}</td>
                 </tr>
             `;
             });
@@ -256,12 +253,9 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th class="text-center" scope="col">NO</th>
-                                            <th class="text-center" scope="col">NIM</th>
-                                            <th class="text-center" scope="col">Nama</th>
                                             <th class="text-center" scope="col">Periode Semester</th>
                                             <th class="text-center" scope="col">Jenis MBKM</th>
                                             <th class="text-center" scope="col">Lokasi MBKM</th>
-                                            <th class="text-center" scope="col">Judul MBKM</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -276,7 +270,7 @@
                 cancelButtonText: 'Batal',
                 confirmButtonText: 'Setujui',
                 confirmButtonColor: '#28a745',
-                width: '80vw'
+                width: '50vw'
             }).then((result) => {
                 if (result.isConfirmed) {
                     e.currentTarget.submit()
