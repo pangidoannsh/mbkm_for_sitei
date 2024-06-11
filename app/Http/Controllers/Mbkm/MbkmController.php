@@ -50,9 +50,9 @@ class MbkmController extends Controller
     {
         $prodiId = Auth::guard("dosen")->user()->prodi_id;
         $mbkm = Mbkm::usulanProdi($prodiId)->orderBy("batas", "asc")->get();
-        $countRiwayat = Mbkm::riwayatProdi($prodiId)->count();
+        $riwayatMbkm = Mbkm::riwayatProdi($prodiId)->with("mahasiswa", "program")->get();
         $countBerjalan = Mbkm::berjalanProdi($prodiId)->count();
-        return view('mbkm.prodi.index', compact('mbkm', 'countRiwayat', 'countBerjalan'));
+        return view('mbkm.prodi.index', compact('mbkm', 'riwayatMbkm', 'countBerjalan'));
     }
 
     public function staffIndex()

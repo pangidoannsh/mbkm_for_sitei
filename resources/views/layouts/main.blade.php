@@ -284,11 +284,11 @@
                                 class="d-inline-block mr-2">
                         </a>
                         @if (Str::length(Auth::guard('web')->user()) > 0)
-                            <a class="navbar-brand mt-1 " href="/">SITEI
+                            <a class="navbar-brand mt-1 " href="/">MBKM
                             @elseif (Str::length(Auth::guard('dosen')->user()) > 0)
-                                <a class="navbar-brand mt-1 " href="/persetujuan-kp-skripsi">SITEI
+                                <a class="navbar-brand mt-1 " href="/persetujuan-kp-skripsi">MBKM
                                 @elseif (Str::length(Auth::guard('mahasiswa')->user()) > 0)
-                                    <a class="navbar-brand mt-1 " href="/">SITEI
+                                    <a class="navbar-brand mt-1 " href="/">MBKM
                         @endif
                         </a>
                     </div>
@@ -313,7 +313,7 @@
                                     {{-- PENGUMUMAN --}}
 
                                     @if (in_array(Auth::guard('dosen')->user()->role_id, [5, 6, 7, 8]))
-                                        <li class="nav-item dropdown ">
+                                        {{-- <li class="nav-item dropdown ">
                                             <a class="nav-link dropdown-toggle" id="pengumumanDropdown" role="button"
                                                 data-bs-toggle="dropdown" class="nav-link ">
                                                 <span
@@ -331,12 +331,12 @@
                                                         href="{{ route('pengumuman.pengelola') }}">Pengelola</a>
                                                 </li>
                                             </ul>
-                                        </li>
+                                        </li> --}}
                                     @else
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a class="nav-link {{ Request::is('pengumuman*') ? 'text-success' : '' }} "
                                                 aria-current="page" href="{{ route('pengumuman') }}">PENGUMUMAN</a>
-                                        </li>
+                                        </li> --}}
                                     @endif
 
                                     {{-- END PENGUMUMAN --}}
@@ -393,10 +393,10 @@
                                 </ul>
 
 
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }} "
                                         aria-current="page" href="/inventaris/peminjaman-dosen">INVENTARIS</a>
-                                </li>
+                                </li> --}}
                                 @if (in_array(Auth::guard('dosen')->user()->role_id, [6, 7, 8]))
                                     <li class="nav-item">
                                         <a class="nav-link {{ Request::is('mbkm*') ? 'text-success' : '' }}"
@@ -405,7 +405,7 @@
                                 @endif
                                 {{-- DistribusiDokumen --}}
                                 @if (in_array(Auth::guard('dosen')->user()->role_id, [5, 6, 7, 8]))
-                                    <li class="nav-item dropdown ">
+                                    {{-- <li class="nav-item dropdown ">
                                         <a class="nav-link dropdown-toggle" id="dokumenDropdown" role="button"
                                             data-bs-toggle="dropdown" class="nav-link ">
                                             <span
@@ -423,14 +423,14 @@
                                                     href="{{ route('pengelola') }}">Pengelola</a>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> --}}
                                 @else
-                                    <li class="nav-item dropdown baru">
+                                    {{-- <li class="nav-item dropdown baru">
                                         <a href="{{ route('doc.index') }}"
                                             class="nav-link {{ Request::is('distribusi-dokumen*') ? 'text-success' : '' }}">
                                             DOKUMEN
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 @endif
 
                             @endif
@@ -439,7 +439,7 @@
 
                             @if (Str::length(Auth::guard('web')->user()) > 0)
                                 @if (Auth::guard('web')->user()->role_id == 12)
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link {{ Request::is('pengumuman*') ? 'text-success' : '' }} "
                                             aria-current="page" href="{{ route('pengumuman') }}">PENGUMUMAN</a>
                                     </li>
@@ -452,7 +452,7 @@
                                             class="nav-link {{ Request::is('distribusi-dokumen*') ? 'text-success' : '' }}">
                                             DOKUMEN
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 @endif
                             @endif
 
@@ -460,10 +460,10 @@
 
                             @if (Str::length(Auth::guard('mahasiswa')->user()) > 0)
                                 <ul class="navbar-nav">
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link {{ Request::is('pengumuman*') ? 'text-success' : '' }} "
                                             aria-current="page" href="{{ route('pengumuman') }}">PENGUMUMAN</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle " href="" id="navbarDropdown"
                                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -495,21 +495,21 @@
                                     </li>
                                 </ul>
 
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }} "
                                         aria-current="page" href="/inventaris/peminjamanmhs">INVENTARIS</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a class="nav-link {{ Request::is('mbkm*') ? 'text-success' : '' }}"
                                         aria-current="page" href="{{ route('mbkm') }}">MBKM</a>
                                 </li>
                                 {{-- DistribusiDokumen --}}
-                                <li class="nav-item dropdown baru">
+                                {{-- <li class="nav-item dropdown baru">
                                     <a id="dokumendropdown" href="{{ route('doc.index') }}"
                                         class="nav-link {{ Request::is('distribusi-dokumen*') ? 'text-success' : '' }}">
                                         DOKUMEN
                                     </a>
-                                </li>
+                                </li> --}}
                             @endif
 
                             @if (Str::length(Auth::guard('web')->user()) > 0)
@@ -517,11 +517,11 @@
                                         Auth::guard('web')->user()->role_id == 3 ||
                                         Auth::guard('web')->user()->role_id == 4)
                                     <ul class="navbar-nav">
-
+{{-- 
                                         <li class="nav-item">
                                             <a class="nav-link {{ Request::is('pengumuman*') ? 'text-success' : '' }} "
                                                 aria-current="page" href="{{ route('pengumuman') }}">PENGUMUMAN</a>
-                                        </li>
+                                        </li> --}}
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle " href="" id="navbarDropdown"
@@ -565,10 +565,10 @@
                                         </li>
                                     </ul>
 
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }}"
                                             aria-current="page" href="/inventaris/peminjamanadm">INVENTARIS</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item">
                                         <a class="nav-link {{ Request::is('mbkm*') ? 'text-success' : '' }}"
                                             aria-current="page" href="{{ route('mbkm.staff') }}">MBKM</a>
@@ -586,10 +586,10 @@
                                 @if (Auth::guard('web')->user()->role_id == 1)
                                     <ul class="navbar-nav">
 
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a class="nav-link {{ Request::is('pengumuman*') ? 'text-success' : '' }} "
                                                 aria-current="page" href="{{ route('pengumuman') }}">PENGUMUMAN</a>
-                                        </li>
+                                        </li> --}}
 
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle " href="" id="navbarDropdown"
@@ -628,18 +628,18 @@
                                         </li>
                                     </ul>
 
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link {{ Request::is('inventaris*') ? 'text-success' : '' }}"
                                             aria-current="page" href="/inventaris/peminjamanadm">INVENTARIS</a>
-                                    </li>
+                                    </li> --}}
 
                                     {{-- DistribusiDokumen --}}
-                                    <li class="nav-item dropdown baru">
+                                    {{-- <li class="nav-item dropdown baru">
                                         <a id="dokumendropdown" href="{{ route('doc.index') }}"
                                             class="nav-link {{ Request::is('distribusi-dokumen*') ? 'text-success' : '' }}">
                                             DOKUMEN
                                         </a>
-                                    </li>
+                                    </li> --}}
 
 
                                     <ul class="navbar-nav">

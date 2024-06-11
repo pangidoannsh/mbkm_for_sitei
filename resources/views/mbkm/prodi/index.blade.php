@@ -36,7 +36,7 @@
             <span class="px-2">|</span>
             <li>
                 <a href="{{ route('mbkm.prodi.riwayat') }}" class="px-1">
-                    Riwayat ({{ $countRiwayat }})
+                    Riwayat ({{ $riwayatMbkm->count() }})
                 </a>
             </li>
         </ul>
@@ -93,7 +93,7 @@
                                     -
                                 @endif
                             </td>
-                            <th>
+                            <td>
                                 <div class="row row-cols-2" style="width: 56px;margin: 0 auto">
                                     <div>
                                         <a href="{{ route('mbkm.detail', $km->id) }}" class="badge btn btn-info p-1"
@@ -102,7 +102,8 @@
                                     </div>
                                     @if ($km->status == 'Usulan')
                                         <form action="{{ route('mbkm.prodi.approveusulan', $km->id) }}" method="POST"
-                                            style="display: inline;" class="setujui-usulan">
+                                            style="display: inline;" class="setujui-usulan"
+                                            data-nim="{{ $km->mahasiswa_nim }}">
                                             @csrf
                                             <button type="submit" class="badge btn btn-success p-1"><i class="fas fa-check"
                                                     title="Setujui Usulan"></i></button>
@@ -137,7 +138,7 @@
                                         </form>
                                     @endif
                                 </div>
-                                </td>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -148,24 +149,24 @@
 @endsection
 
 @push('scripts')
-    @foreach ($mbkm as $km)
-        <script>
-            $('.show-tolak-usulan').click((e) => {
-                const id = $(e.currentTarget).data("id");
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Tolak Usulan MBKM',
-                    text: 'Apakah Anda Yakin?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    cancelButtonText: 'Batal',
-                    confirmButtonText: 'Tolak',
-                    confirmButtonColor: '#dc3545'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Tolak Usulan MBKM',
-                            html: `
+    <script>
+        const riwayats = @json($riwayatMbkm).map(data => data)
+        $('.show-tolak-usulan').click((e) => {
+            const id = $(e.currentTarget).data("id");
+            e.preventDefault();
+            Swal.fire({
+                title: 'Tolak Usulan MBKM',
+                text: 'Apakah Anda Yakin?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Tolak',
+                confirmButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Tolak Usulan MBKM',
+                        html: `
                         <form id="reasonForm" action="/mbkm/prodi/tolakusulan/${id}" method="POST">
                         @method('put')
                             @csrf
@@ -176,28 +177,28 @@
                             <button type="button" onclick="Swal.close();" class="btn btn-secondary p-2 px-3">Batal</button>
                         </form>
                     `,
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                        });
-                    }
-                });
-            })
-            $('.show-tolak-konversi').click((e) => {
-                const id = $(e.currentTarget).data("id");
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Tolak Konversi MBKM',
-                    text: 'Apakah Anda Yakin?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    cancelButtonText: 'Batal',
-                    confirmButtonText: 'Tolak',
-                    confirmButtonColor: '#dc3545'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Tolak Usulan MBKM',
-                            html: `
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        })
+        $('.show-tolak-konversi').click((e) => {
+            const id = $(e.currentTarget).data("id");
+            e.preventDefault();
+            Swal.fire({
+                title: 'Tolak Konversi MBKM',
+                text: 'Apakah Anda Yakin?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Tolak',
+                confirmButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Tolak Usulan MBKM',
+                        html: `
                         <form id="reasonForm" action="/mbkm/prodi/tolakkonversi/${id}" method="POST">
                         @method('put')
                             @csrf
@@ -208,47 +209,79 @@
                             <button type="button" onclick="Swal.close();" class="btn btn-secondary p-2 px-3">Batal</button>
                         </form>
                     `,
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                        });
-                    }
-                });
-            })
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        })
 
-            $(".setujui-pengunduran-diri").submit((e) => {
-                const form = $(this).closest("form");
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Usulan Pengunduran Diri',
-                    text: 'Setujui Usulan Pengunduran Diri?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    cancelButtonText: 'Batal',
-                    confirmButtonText: 'Setujui',
-                    confirmButtonColor: '#dc3545'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        e.currentTarget.submit()
-                    }
-                })
+        $(".setujui-pengunduran-diri").submit((e) => {
+            const form = $(this).closest("form");
+            e.preventDefault();
+            Swal.fire({
+                title: 'Usulan Pengunduran Diri',
+                text: 'Setujui Usulan Pengunduran Diri?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Setujui',
+                confirmButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.currentTarget.submit()
+                }
             })
-            $(".setujui-usulan").submit((e) => {
-                const form = $(this).closest("form");
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Usulan MBKM',
-                    text: 'Setujui Usulan Mengikuti MBKM?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    cancelButtonText: 'Batal',
-                    confirmButtonText: 'Setujui',
-                    confirmButtonColor: '#28a745'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        e.currentTarget.submit()
-                    }
-                })
+        })
+        $(".setujui-usulan").submit(function(e) {
+            e.preventDefault();
+            const form = $(this).closest("form");
+            const nim = $(this).data("nim")
+            const prevMbkm = riwayats.filter(riwayat => riwayat.mahasiswa_nim == nim);
+            let tbodyContent = "";
+            prevMbkm.forEach((riwayat, index) => {
+                tbodyContent += `
+                <tr>
+                    <td class="text-center">${index + 1}</td>
+                    <td class="text-center">${riwayat.mahasiswa_nim}</td>
+                    <td class="text-center">${riwayat.mahasiswa.nama}</td>
+                    <td class="text-center">${riwayat.semester}</td>
+                    <td class="text-center">${riwayat.program.name}</td>
+                    <td class="text-center">${riwayat.perusahaan}</td>
+                    <td class="text-center">${riwayat.judul}</td>
+                </tr>
+            `;
+            });
+            const htmlContent = `<table class="table table-responsive-lg table-bordered table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-center" scope="col">NO</th>
+                                            <th class="text-center" scope="col">NIM</th>
+                                            <th class="text-center" scope="col">Nama</th>
+                                            <th class="text-center" scope="col">Periode Semester</th>
+                                            <th class="text-center" scope="col">Jenis MBKM</th>
+                                            <th class="text-center" scope="col">Lokasi MBKM</th>
+                                            <th class="text-center" scope="col">Judul MBKM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${tbodyContent}
+                                    </tbody>
+                                </table>`
+            Swal.fire({
+                title: 'Usulan MBKM',
+                html: `<p>Setujui Usulan Mengikuti MBKM?</p><h5 class="text-start fw-bold">Mbkm Sebelumnya</h5>${htmlContent}`,
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Setujui',
+                confirmButtonColor: '#28a745',
+                width: '80vw'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.currentTarget.submit()
+                }
             })
-        </script>
-    @endforeach
+        })
+    </script>
 @endpush
