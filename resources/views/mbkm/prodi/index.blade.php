@@ -243,9 +243,9 @@
                 tbodyContent += `
                 <tr>
                     <td class="text-center">${index + 1}</td>
-                    <td class="text-center">${riwayat.semester}</td>
-                    <td class="text-center">${riwayat.program.name}</td>
+                    <td class="text-center fw-bold">${riwayat.program.name}</td>
                     <td class="text-center">${riwayat.perusahaan}</td>
+                    <td class="text-center">${riwayat.semester}</td>
                 </tr>
             `;
             });
@@ -253,9 +253,9 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th class="text-center" scope="col">NO</th>
-                                            <th class="text-center" scope="col">Periode Semester</th>
                                             <th class="text-center" scope="col">Jenis MBKM</th>
                                             <th class="text-center" scope="col">Lokasi MBKM</th>
+                                            <th class="text-center" scope="col">Periode Semester</th>
                                         </tr>
                                     </thead>
                                     <tbody>
